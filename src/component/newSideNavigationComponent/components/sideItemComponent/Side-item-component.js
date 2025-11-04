@@ -404,44 +404,44 @@ function SideItemComponent({ onCollapse, navigationProps = {} }) {
       });
 
   // Apply feature-based filtering for white label domains
-  // Map of navigation item IDs to feature IDs
+  // Map of navigation item IDs to feature IDs (array of feature IDs)
   const itemToFeatureMap = {
-    3: 'properties',           // Properties
-    4: 'action-items',         // Action Items
-    5: 'messaging-inbox',      // Messaging (parent)
-    51: 'messaging-inbox',     // Inbox (sub-item)
-    52: 'smart-templates',     // Smart Templates (sub-item)
-    53: 'messaging-inbox',     // Preferences (sub-item) - tied to messaging
-    54: 'upsells',             // Upsells (sub-item)
-    6: 'insights',             // Insights
-    75: 'action-item-settings', // Action Items Settings (in Settings dropdown)
-    76: 'integrations',        // Integrations (in Settings dropdown)
+    3: ['properties'],           // Properties
+    4: ['action-items'],         // Action Items
+    5: ['messaging-inbox'],      // Messaging (parent)
+    51: ['messaging-inbox'],     // Inbox (sub-item)
+    52: ['smart-templates'],     // Smart Templates (sub-item)
+    53: ['messaging-inbox'],     // Preferences (sub-item) - tied to messaging
+    54: ['upsells'],             // Upsells (sub-item)
+    6: ['insights'],             // Insights
+    75: ['action-item-settings'], // Action Items Settings (in Settings dropdown)
+    76: ['integrations'],        // Integrations (in Settings dropdown)
   };
 
   // Filter navigation items based on feature settings
   const featureFilteredData = filteredData.map(item => {
     // Check if this item should be filtered based on features
-    const featureId = itemToFeatureMap[item.id];
+    const featureIds = itemToFeatureMap[item.id];
     
-    // If item has a feature mapping and feature is disabled, filter it out
-    if (featureId) {
-      const enabled = isFeatureEnabled(featureId);
+    // If item has feature mappings, check if ANY of the features are enabled
+    if (featureIds && Array.isArray(featureIds)) {
+      const anyEnabled = featureIds.some(featureId => isFeatureEnabled(featureId));
       
-      if (!enabled) {
-        return null; // Filter out this item
+      if (!anyEnabled) {
+        return null; // Filter out this item if NONE of its features are enabled
       }
     }
 
     // If item has dropdown items, filter those as well
     if (item.dropdownItems && item.dropdownItems.length > 0) {
       const filteredDropdownItems = item.dropdownItems.filter(dropdownItem => {
-        const dropdownFeatureId = itemToFeatureMap[dropdownItem.id];
+        const dropdownFeatureIds = itemToFeatureMap[dropdownItem.id];
         
-        // If dropdown item has a feature mapping and feature is disabled, filter it out
-        if (dropdownFeatureId) {
-          const enabled = isFeatureEnabled(dropdownFeatureId);
+        // If dropdown item has feature mappings, check if ANY of the features are enabled
+        if (dropdownFeatureIds && Array.isArray(dropdownFeatureIds)) {
+          const anyEnabled = dropdownFeatureIds.some(featureId => isFeatureEnabled(featureId));
           
-          if (!enabled) {
+          if (!anyEnabled) {
             return false;
           }
         }

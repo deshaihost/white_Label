@@ -21,6 +21,7 @@ import HostDaddy from "../../component/hostDaddy/hostDaddy";
 import NoltWidget from "../../component/nolt/nolt";
 import useWhiteLabelBranding from "../../helper/useWhiteLabelBranding";
 import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
+import { useFeatureAccess } from "../../helper/useFeatureAccess";
 
 import {
   MetricTile,
@@ -42,6 +43,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { isWhiteLabel, brandName, displayName } = useWhiteLabelBranding();
   const { cssConfig, loading: cssLoading, progress } = useWhiteLabelCss();
+  const { isFeatureEnabled } = useFeatureAccess();
 
   console.log("🎯 STEP 2: Dashboard hooks initialized", {
     isWhiteLabel,
@@ -560,8 +562,10 @@ const Dashboard = () => {
                     <BoxLoader />
                   )}
 
-                  <div className="row">
-                    {!actionItemsCovertationLoading ? (
+                  {/* Action Items Section - Only show if feature is enabled */}
+                  {isFeatureEnabled('action-items') && (
+                    <div className="row">
+                      {!actionItemsCovertationLoading ? (
                       <div style={{
                         backgroundColor: 'var(--white-label-background-secondary, #17191f)',
                         border: `2px solid ${cssConfig?.css_data?.borders?.primary || '#013280'}`,
@@ -803,6 +807,7 @@ const Dashboard = () => {
                       <BoxLoader />
                     )}
                   </div>
+                  )}
                 </div>
               </div>
             </div>
