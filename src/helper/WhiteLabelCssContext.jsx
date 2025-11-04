@@ -507,18 +507,64 @@ export const WhiteLabelCssProvider = ({ children }) => {
       }
     };
 
+    // Listen for token availability event
+    const handleTokenAvailable = (event) => {
+      console.log('🎉 [CSS API] Token available event received!', { hasToken: !!event.detail?.token });
+      const token = getActiveToken();
+      if (token && !fetchingRef.current) {
+        console.log('🔄 [CSS API] Token confirmed, fetching CSS...');
+        // Set loading true while fetching
+        setCssState(prevState => ({
+          ...prevState,
+          loading: true,
+          progress: 10
+        }));
+        fetchWhiteLabelCss();
+      }
+    };
+    
+    window.addEventListener('tokenAvailable', handleTokenAvailable);
+
     // Check if we have a token before fetching
-    // This prevents 401 errors during the login process
+    // This ensures CSS is only loaded AFTER authentication
     const token = getActiveToken();
+    const domainName = window.location.hostname;
+    const isHostBuddy = domainName === 'hostbuddy.ai' || 
+                       domainName === 'www.hostbuddy.ai';
+    
     if (token) {
+      console.log('🔄 [CSS API] Token found immediately, fetching CSS...');
       fetchWhiteLabelCss();
-    } else {
-      // If no token yet, set loading to false and wait for authentication
-      console.log('⏳ [CSS API] No token found, waiting for authentication...');
+    } else if (isHostBuddy) {
+      // HostBuddy domain doesn't need white label CSS
+      console.log('⏭️ [CSS API] HostBuddy domain, no CSS fetch needed');
       setCssState(prevState => ({
         ...prevState,
-        loading: false
+        loading: false,
+        isHostBuddyDomain: true
       }));
+    } else {
+      // For white label domains without token yet
+      const currentPath = window.location.pathname;
+      const isAuthenticatedRoute = !['/login', '/signup', '/forgot-password', '/reset-password', '/client-login'].includes(currentPath);
+      
+      if (isAuthenticatedRoute) {
+        // We're on an authenticated route (like /dashboard) - WAIT for CSS to load
+        console.log('⏳ [CSS API] No token yet on authenticated route, waiting for authentication...');
+        console.log('🔒 [CSS API] Loading state ACTIVE - will wait for tokenAvailable event');
+        setCssState(prevState => ({
+          ...prevState,
+          loading: true,
+          progress: 5
+        }));
+      } else {
+        // We're on an unauthenticated page like /login - DON'T wait
+        console.log('✅ [CSS API] On unauthenticated page, no loading needed');
+        setCssState(prevState => ({
+          ...prevState,
+          loading: false
+        }));
+      }
       
       // Poll for token availability with exponential backoff
       let attempts = 0;
@@ -535,15 +581,24 @@ export const WhiteLabelCssProvider = ({ children }) => {
           console.log(`⏳ [CSS API] Token check attempt ${attempts}/${maxAttempts}, retrying in ${delay}ms...`);
           setTimeout(checkForToken, delay);
         } else {
-          console.log('⏹️ [CSS API] Max token check attempts reached, giving up');
+          console.log('⏹️ [CSS API] Max token check attempts reached, stopping attempts');
+          console.log('ℹ️ [CSS API] Will wait for tokenAvailable event...');
         }
       };
       
       // Start checking after a short initial delay
       const initialTimer = setTimeout(checkForToken, 100);
       
-      return () => clearTimeout(initialTimer);
+      return () => {
+        clearTimeout(initialTimer);
+        window.removeEventListener('tokenAvailable', handleTokenAvailable);
+      };
     }
+    
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener('tokenAvailable', handleTokenAvailable);
+    };
   }, []);
 
   return (

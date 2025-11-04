@@ -64,6 +64,9 @@ const setAuthorization = (token) => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     currentActiveToken = token; // Store the current active token
     sessionStorage.setItem(ACTIVE_TOKEN, token); // Store token in session storage
+    
+    // Dispatch custom event to notify Context Providers that token is now available
+    window.dispatchEvent(new CustomEvent('tokenAvailable', { detail: { token } }));
   }
   else {
     delete axios.defaults.headers.common["Authorization"];

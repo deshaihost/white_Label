@@ -96,7 +96,7 @@ const Login = () => {
       const user = { data: "userData", id: 1, password: "test", lastName: "User", role: "userRole", token: data.password, refreshToken: data.password };
       api.setLoggedInUser(user, rememberMe);
       setAuthorization(user["token"]);
-      navigate('/dashboard')
+      navigate('/dashboard');
       dispatch(stateEmptyActions());
     }
     

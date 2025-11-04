@@ -542,13 +542,39 @@ export const WhiteLabelLogoProvider = ({ children }) => {
       }
     };
 
+    // Listen for token availability event
+    const handleTokenAvailable = (event) => {
+      console.log('🎉 [LOGO API] Token available event received!', { hasToken: !!event.detail?.token });
+      const token = getActiveToken();
+      if (token && !fetchingRef.current) {
+        console.log('🔄 [LOGO API] Token confirmed, fetching logos...');
+        fetchWhiteLabelLogos();
+      }
+    };
+    
+    window.addEventListener('tokenAvailable', handleTokenAvailable);
+
     // Check if we have a token before fetching
-    // This prevents 401 errors during the login process
+    // This ensures logos are only loaded AFTER authentication
     const token = getActiveToken();
+    const domainName = window.location.hostname;
+    const isHostBuddy = domainName === 'hostbuddy.ai' || 
+                       domainName === 'www.hostbuddy.ai';
+    
     if (token) {
+      console.log('🔄 [LOGO API] Token found immediately, fetching logos...');
       fetchWhiteLabelLogos();
+    } else if (isHostBuddy) {
+      // HostBuddy domain doesn't need white label logos
+      console.log('⏭️ [LOGO API] HostBuddy domain, no logo fetch needed');
+      setLogos(prevState => ({
+        ...prevState,
+        loading: false,
+        isRetrying: false,
+        isHostBuddyDomain: true
+      }));
     } else {
-      // If no token yet, set loading to false and wait for authentication
+      // For white label domains, keep polling for token
       console.log('⏳ [LOGO API] No token found, waiting for authentication...');
       setLogos(prevState => ({
         ...prevState,
@@ -571,15 +597,26 @@ export const WhiteLabelLogoProvider = ({ children }) => {
           console.log(`⏳ [LOGO API] Token check attempt ${attempts}/${maxAttempts}, retrying in ${delay}ms...`);
           setTimeout(checkForToken, delay);
         } else {
-          console.log('⏹️ [LOGO API] Max token check attempts reached, giving up');
+          console.log('⏹️ [LOGO API] Max token check attempts reached, stopping attempts');
+          console.log('ℹ️ [LOGO API] This is expected on unauthenticated pages like /login');
+          console.log('ℹ️ [LOGO API] Will wait for tokenAvailable event...');
+          // Don't show error - this is normal for unauthenticated pages
         }
       };
       
       // Start checking after a short initial delay
       const initialTimer = setTimeout(checkForToken, 100);
       
-      return () => clearTimeout(initialTimer);
+      return () => {
+        clearTimeout(initialTimer);
+        window.removeEventListener('tokenAvailable', handleTokenAvailable);
+      };
     }
+    
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener('tokenAvailable', handleTokenAvailable);
+    };
   }, []);
 
   return (
