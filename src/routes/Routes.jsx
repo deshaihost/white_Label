@@ -27,6 +27,7 @@ import StatisticsPage from "../pages/statistics/statistics";
 import ProtectedRoute from "./ProtectedRoute";
 import FeatureProtectedRoute from "./FeatureProtectedRoute";
 import FeatureProtectedUnauthRoute from "./FeatureProtectedUnauthRoute";
+import HostBuddyOnlyRoute from "./HostBuddyOnlyRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
 import GuidedSetup from "../pages/properties/addProperties/guided_setup/guidedSetup";
@@ -256,11 +257,14 @@ const Routing = () => {
         (!authData || shouldUseUserNavBar) && <NavBar />}
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/pricing" element={<Pricing />}></Route>
-        <Route path="/meet-hostbuddy" element={<MeetHostBoddy />}></Route>
-        <Route path="/faqs" element={<Faqs />}></Route>
-        <Route path="/about-us" element={<AboutUs />}></Route>
+        {/* Landing pages - HostBuddy domain only */}
+        <Route path="/" element={<HostBuddyOnlyRoute redirectTo="/client-login"><Home /></HostBuddyOnlyRoute>} />
+        <Route path="/pricing" element={<HostBuddyOnlyRoute redirectTo="/client-login"><Pricing /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/meet-hostbuddy" element={<HostBuddyOnlyRoute redirectTo="/client-login"><MeetHostBoddy /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/faqs" element={<HostBuddyOnlyRoute redirectTo="/client-login"><Faqs /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/about-us" element={<HostBuddyOnlyRoute redirectTo="/client-login"><AboutUs /></HostBuddyOnlyRoute>}></Route>
+        
+        {/* Auth pages - allowed on all domains with feature protection */}
         <Route 
           path="/login" 
           element={
@@ -287,91 +291,77 @@ const Routing = () => {
             </FeatureProtectedUnauthRoute>
           }
         />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />}></Route>
-        <Route path="/termsof-service" element={<TermsofService />}></Route>
-        <Route path="/data-processing-agreement" element={<DPA />}></Route>
-        <Route path="/subprocessors" element={<Subprocessors />}></Route>
-        <Route
-          path="/scheduling-walkthrough"
-          element={<SchedulingWalkthrough />}
-        ></Route>
-        <Route path="/tips-and-tricks" element={<TipsAndTricks />}></Route>
-        <Route path="/best-practices" element={<BestPractices />}></Route>
-        <Route path="/schedule-guide" element={<ScheduleHostBuddy />}></Route>
-        <Route
-          path="/notifications-guide"
-          element={<NotificationsGuide />}
-        ></Route>
-        <Route
-          path="/customize-hostbuddy-guide"
-          element={<CustomizeHostBuddyGuide />}
-        ></Route>
-        <Route
-          path="/hostbuddy-for-guesty"
-          element={<HostbuddyForGuesty />}
-        ></Route>
-        <Route path="/hostbuddy-for-tidy" element={<Home />}></Route>
 
-        <Route path="/testing-questions" element={<TestingQuestions />}></Route>
-        <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
-        <Route
-          path="/email_confirmation"
-          element={<EmailConfirmationAction />}
-        ></Route>
-        <Route path="/reset-password" element={<ResetPass />}></Route>
-        <Route path="/setup-guide" element={<SetupGuide />}></Route>
-        <Route path="/getstarted" element={<GetStarted />}></Route>
-        <Route path="/hostaway-setup" element={<HostawaySetup />}></Route>
-        <Route path="/blog" element={<BlogLandingPage />}></Route>
-        <Route path="/blog/:article_name" element={<BlogArticle />}></Route>
+        <Route path="/email_confirmation" element={<EmailConfirmationAction />} />
+        <Route path="/confirm-email" element={<ConfirmYourEmail />} />
+        <Route path="/reset-password" element={<ResetPass />} />
 
-        <Route path="/pms-instructions" element={<PmsInstructionsMain />} />
+        {/* Legal pages - HostBuddy domain only */}
+        <Route path="/privacy-policy" element={<HostBuddyOnlyRoute><PrivacyPolicy /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/termsof-service" element={<HostBuddyOnlyRoute><TermsofService /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/data-processing-agreement" element={<HostBuddyOnlyRoute><DPA /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/subprocessors" element={<HostBuddyOnlyRoute><Subprocessors /></HostBuddyOnlyRoute>}></Route>
+
+        {/* User guides, setup guides, PMS instruction guides - no longer used (replaced by DocsHound user guide)
+        <Route path="/scheduling-walkthrough" element={<HostBuddyOnlyRoute><SchedulingWalkthrough /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/tips-and-tricks" element={<HostBuddyOnlyRoute><TipsAndTricks /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/best-practices" element={<HostBuddyOnlyRoute><BestPractices /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/schedule-guide" element={<HostBuddyOnlyRoute><ScheduleHostBuddy /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/notifications-guide" element={<HostBuddyOnlyRoute><NotificationsGuide /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/customize-hostbuddy-guide" element={<HostBuddyOnlyRoute><CustomizeHostBuddyGuide /></HostBuddyOnlyRoute>}></Route>
+
+        <Route path="/testing-questions" element={<HostBuddyOnlyRoute><TestingQuestions /></HostBuddyOnlyRoute>}></Route>
+
+
+        <Route path="/setup-guide" element={<HostBuddyOnlyRoute><SetupGuide /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/getstarted" element={<HostBuddyOnlyRoute><GetStarted /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/hostaway-setup" element={<HostBuddyOnlyRoute><HostawaySetup /></HostBuddyOnlyRoute>}></Route>
+
+
+        <Route path="/pms-instructions" element={<HostBuddyOnlyRoute><PmsInstructionsMain /></HostBuddyOnlyRoute>} />
         <Route
           path="/pms-instructions/guesty"
-          element={<GuestyInstructions />}
+          element={<HostBuddyOnlyRoute><GuestyInstructions /></HostBuddyOnlyRoute>}
         />
         <Route
           path="/pms-instructions/beds24"
-          element={<Beds24Instructions />}
+          element={<HostBuddyOnlyRoute><Beds24Instructions /></HostBuddyOnlyRoute>}
         />
         <Route
           path="/pms-instructions/hostaway"
-          element={<HostawayInstructions />}
+          element={<HostBuddyOnlyRoute><HostawayInstructions /></HostBuddyOnlyRoute>}
         />
         <Route
           path="/pms-instructions/lodgify"
-          element={<LodgifyInstructions />}
+          element={<HostBuddyOnlyRoute><LodgifyInstructions /></HostBuddyOnlyRoute>}
         />
         <Route
           path="/pms-instructions/smoobu"
-          element={<SmoobuInstructions />}
+          element={<HostBuddyOnlyRoute><SmoobuInstructions /></HostBuddyOnlyRoute>}
         />
         <Route
           path="/pms-instructions/hostify"
-          element={<HostifyInstructions />}
+          element={<HostBuddyOnlyRoute><HostifyInstructions /></HostBuddyOnlyRoute>}
         />
         <Route
           path="/pms-instructions/hospitable"
-          element={<HospitableInstructions />}
+          element={<HostBuddyOnlyRoute><HospitableInstructions /></HostBuddyOnlyRoute>}
         />
-        <Route
-          path="/pms-instructions/hostfully"
-          element={<HostfullyInstructions />}
-        />
-        <Route
-          path="/pms-instructions/ownerrez"
-          element={<OwnerRezInstructions />}
-        />
-        <Route
-          path="/pms-instructions/bookingsync"
-          element={<BookingSyncInstructions />}
-        />
+        <Route path="/pms-instructions/hostfully" element={<HostBuddyOnlyRoute><HostfullyInstructions /></HostBuddyOnlyRoute>} />
+        <Route path="/pms-instructions/ownerrez" element={<HostBuddyOnlyRoute><OwnerRezInstructions /></HostBuddyOnlyRoute>} />
+        <Route path="/pms-instructions/bookingsync" element={<HostBuddyOnlyRoute><BookingSyncInstructions /></HostBuddyOnlyRoute>} />
+        */}
 
-        <Route path="/ai-messaging" element={<AiMessaging />} />
-        <Route path="/smart-templates" element={<SmartTemplatesLanding />} />
+        {/* Blog - HostBuddy domain only */}
+        <Route path="/blog" element={<HostBuddyOnlyRoute redirectTo="/client-login"><BlogLandingPage /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/blog/:article_name" element={<HostBuddyOnlyRoute redirectTo="/client-login"><BlogArticle /></HostBuddyOnlyRoute>}></Route>
 
-        <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
-        <Route path="/software-solutions" element={<SoftwareSolutions />} />
+        {/* Marketing/feature pages - HostBuddy domain only */}
+        <Route path="/ai-messaging" element={<HostBuddyOnlyRoute redirectTo="/client-login"><AiMessaging /></HostBuddyOnlyRoute>} />
+        <Route path="/smart-templates" element={<HostBuddyOnlyRoute redirectTo="/client-login"><SmartTemplatesLanding /></HostBuddyOnlyRoute>} />
+
+        <Route path="/become-an-affiliate" element={<HostBuddyOnlyRoute><BecomeAnAffiliate /></HostBuddyOnlyRoute>} />
+        <Route path="/software-solutions" element={<HostBuddyOnlyRoute><SoftwareSolutions /></HostBuddyOnlyRoute>} />
         <Route
           path="*"
           element={
@@ -536,13 +526,20 @@ const Routing = () => {
           }
         />
 
-        <Route path="/integrations" element={<Integrations />} />
-        <Route path="/turno" element={<Turno />} />
+        {/* Marketing/integration pages - HostBuddy domain only */}
+        <Route path="/integrations" element={<HostBuddyOnlyRoute redirectTo="/client-login"><Integrations /></HostBuddyOnlyRoute>} />
+        <Route path="/turno" element={<HostBuddyOnlyRoute redirectTo="/client-login"><Turno /></HostBuddyOnlyRoute>} />
+        <Route path="/hostbuddy-for-guesty" element={<HostBuddyOnlyRoute><HostbuddyForGuesty /></HostBuddyOnlyRoute>}></Route>
+        <Route path="/hostbuddy-for-tidy" element={<HostBuddyOnlyRoute redirectTo="/client-login"><Home /></HostBuddyOnlyRoute>}></Route>
 
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>
         <Route path="/workbench-multi/:multi_property_id" element={<WorkbenchMulti />}></Route>
         <Route path="/property-chat/:id" element={<CopyChatBotLink />}></Route>
+        
+        {/* 404 catch-all - must be last */}
+        <Route path="*" element={<ThankError imgSrc={ErrorImg} text="We cannot find the page you're looking for" /> }/>
+
       </Routes>
       {shouldShowFooter(location.pathname) && <Footer />}
     </>
