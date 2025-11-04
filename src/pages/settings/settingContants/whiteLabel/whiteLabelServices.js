@@ -345,7 +345,8 @@ export const saveCssConfig = async (data) => {
         domain: data.domain,
         key: data.key,
         css_properties: data.css_properties,
-        dark_mode_css_properties: data.dark_mode_css_properties
+        dark_mode_css_properties: data.dark_mode_css_properties,
+        brand_name: data.brand_name
       },
       { headers }
     );

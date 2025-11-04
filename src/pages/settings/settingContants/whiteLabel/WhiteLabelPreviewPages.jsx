@@ -78,7 +78,7 @@ const SimpleBarChart = ({ data, brandColors, height = 240 }) => {
 };
 
 // Dashboard Preview Component
-export function DashboardPreview({ brandColors }) {
+export function DashboardPreview({ brandColors, brandName = 'HostBuddy' }) {
   const chartData = [
     { hour: '12am', value: 2 }, { hour: '1am', value: 1 }, { hour: '2am', value: 1 }, { hour: '3am', value: 1 },
     { hour: '4am', value: 1 }, { hour: '5am', value: 3 }, { hour: '6am', value: 4 }, { hour: '7am', value: 8 },
@@ -118,8 +118,8 @@ export function DashboardPreview({ brandColors }) {
       {/* Metrics Cards */}
       <div className="metrics-grid">
         {[
-          { title: 'Guest Messages Responded (Total)', value: '513', stats: [['By Host:', '513'], ['By HostBuddy:', '2042']] },
-          { title: 'Average Response Times (Minutes)', value: '0.5', stats: [['By HostBuddy:', '0.5'], ['By Host:', '18.1']] },
+          { title: 'Guest Messages Responded (Total)', value: '513', stats: [['By Host:', '513'], [`By ${brandName}:`, '2042']] },
+          { title: 'Average Response Times (Minutes)', value: '0.5', stats: [[`By ${brandName}:`, '0.5'], ['By Host:', '18.1']] },
           { title: 'Guest Sentiment (Percent)', value: '33.2%', stats: [['Positive:', '33.2%'], ['Neutral:', '58.6%'], ['Negative:', '7.0%']] }
         ].map((card, idx) => (
           <div 
@@ -224,7 +224,7 @@ export function DashboardPreview({ brandColors }) {
 }
 
 // Properties Preview Component
-export function PropertiesPreview({ brandColors }) {
+export function PropertiesPreview({ brandColors, brandName = 'HostBuddy' }) {
   const properties = [
     { 
       name: 'Boho Villa | Best Location | Full Staff', 
@@ -386,7 +386,7 @@ export function PropertiesPreview({ brandColors }) {
 }
 
 // Messaging Preview Component
-export function MessagingPreview({ brandColors }) {
+export function MessagingPreview({ brandColors, brandName = 'HostBuddy' }) {
   // Sample conversation data matching design reference
   const conversations = [
     {
@@ -726,7 +726,7 @@ export function MessagingPreview({ brandColors }) {
 }
 
 // Action Items Preview Component
-export function ActionItemsPreview({ brandColors }) {
+export function ActionItemsPreview({ brandColors, brandName = 'HostBuddy' }) {
   return (
     <>
       <h1 
@@ -787,7 +787,7 @@ export function ActionItemsPreview({ brandColors }) {
 }
 
 // Insights Preview Component
-export function InsightsPreview({ brandColors }) {
+export function InsightsPreview({ brandColors, brandName = 'HostBuddy' }) {
   const chartData = [
     { hour: '12am', value: 2 }, { hour: '6am', value: 4 }, { hour: '12pm', value: 8 },
     { hour: '2pm', value: 15 }, { hour: '6pm', value: 10 }, { hour: '9pm', value: 6 }
@@ -836,7 +836,7 @@ export function InsightsPreview({ brandColors }) {
 }
 
 // Settings Preview Component
-export function SettingsPreview({ brandColors }) {
+export function SettingsPreview({ brandColors, brandName = 'HostBuddy' }) {
   return (
     <>
       <h1 
