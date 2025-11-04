@@ -350,6 +350,186 @@ The dashboard (`pages/dashboard/Dashboard.jsx`) conditionally renders the Action
 
 **Result**: When `action-items` is disabled, the entire Action Items section is hidden from the dashboard on white label domains.
 
+## Protecting Unauthenticated Pages (Login, Signup, etc.)
+
+### Overview
+
+Some features, like authentication pages, exist outside the authenticated portal. You can still gate these pages using the white label feature framework because the `WhiteLabelCssContext` is available globally throughout the app.
+
+### FeatureProtectedUnauthRoute Component
+
+For unauthenticated pages, use the `FeatureProtectedUnauthRoute` component:
+
+**Location**: `react-frontend/src/component/FeatureProtectedUnauthRoute.jsx`
+
+```javascript
+import { useFeatureAccess } from "../helper/useFeatureAccess";
+import { Navigate } from "react-router-dom";
+import NotFoundPage from "./notFoundPage/NotFoundPage";
+
+// Protects unauthenticated routes based on feature availability
+const FeatureProtectedUnauthRoute = ({ children, featureId, redirectTo }) => {
+  const { isFeatureEnabled, loading } = useFeatureAccess();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isFeatureEnabled(featureId)) {
+    if (redirectTo) {
+      return <Navigate to={redirectTo} replace />;
+    }
+    return <NotFoundPage />;
+  }
+
+  return children;
+};
+
+export default FeatureProtectedUnauthRoute;
+```
+
+### Usage in Routes.jsx
+
+Wrap unauthenticated routes with `FeatureProtectedUnauthRoute`:
+
+```javascript
+import FeatureProtectedUnauthRoute from "./FeatureProtectedUnauthRoute";
+
+// In your routes configuration:
+<Route path="/login" element={
+  <FeatureProtectedUnauthRoute featureId="auth-pages" redirectTo="/client-login">
+    <Login />
+  </FeatureProtectedUnauthRoute>
+} />
+
+<Route path="/signup" element={
+  <FeatureProtectedUnauthRoute featureId="auth-pages">
+    <Signup />
+  </FeatureProtectedUnauthRoute>
+} />
+
+<Route path="/forgot" element={
+  <FeatureProtectedUnauthRoute featureId="auth-pages">
+    <ForgotPassword />
+  </FeatureProtectedUnauthRoute>
+} />
+```
+
+### Props
+
+- **`featureId`** (required): The feature ID to check
+- **`redirectTo`** (optional): A path to redirect to when feature is disabled. If not provided, shows 404 page.
+- **`children`**: The page component to render when feature is enabled
+
+### Real-World Example: Auth Pages
+
+The login, signup, and forgot password pages are protected with the `auth-pages` feature:
+
+**Feature Configuration** (`WhiteLabelFeatureSelection.jsx`):
+```javascript
+{
+  id: 'auth-pages',
+  name: 'Authentication Pages',
+  description: 'Enable standard login, signup, and forgot password pages',
+  paths: ['/login', '/signup', '/forgot'],
+  version: 'v1'
+}
+```
+
+**Routes Configuration** (`Routes.jsx`):
+```javascript
+<Route path="/login" element={
+  <FeatureProtectedUnauthRoute featureId="auth-pages" redirectTo="/client-login">
+    <Login />
+  </FeatureProtectedUnauthRoute>
+} />
+```
+
+**Result**:
+- When `auth-pages` is disabled on a white label domain:
+  - Visiting `/login` redirects to `/client-login` (alternative auth page)
+  - Visiting `/signup` or `/forgot` shows 404 page
+- On `hostbuddy.ai`, all auth pages are always accessible
+
+## Protecting Settings Tabs
+
+Some features appear as tabs within the settings page. You can conditionally render both the sidebar tab and the content section.
+
+### Real-World Example: Subscription Tab
+
+**Sidebar** (`pages/settings/settingSideBar/SettingSideBarIndex.jsx`):
+```javascript
+import { useFeatureAccess } from "../../../helper/useFeatureAccess";
+
+const SettingSideBarIndex = (props) => {
+  const { isFeatureEnabled } = useFeatureAccess();
+  
+  return (
+    <div>
+      {/* Other tabs... */}
+      
+      {isFeatureEnabled('subscriptions') && (
+        <div className={`setting-tab-link ${activeTab === subscription && "active"}`} 
+             onClick={() => changeHndl(subscription)}>
+          <h6>
+            <FaChessQueen />
+            Subscription
+          </h6>
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+**Content** (`pages/settings/SettingIndex.jsx`):
+```javascript
+import { useFeatureAccess } from "../../helper/useFeatureAccess";
+
+const SettingIndex = () => {
+  const { isFeatureEnabled } = useFeatureAccess();
+  
+  return (
+    <div>
+      {/* Other setting sections... */}
+      
+      {isFeatureEnabled('subscriptions') && interFaceTypes?.subscription === interFaceSettings && (
+        <SubscriptionIndex />
+      )}
+    </div>
+  );
+};
+```
+
+**Result**: When `subscriptions` is disabled, both the tab in the sidebar and the subscription settings page are hidden.
+
+## Protecting Dashboard Banners and Widgets
+
+### Real-World Example: Subscription Banner
+
+**Dashboard** (`component/dashboard/Dashboard.jsx`):
+```javascript
+import { useFeatureAccess } from "../../helper/useFeatureAccess";
+
+const Dashboard = () => {
+  const { isFeatureEnabled } = useFeatureAccess();
+  
+  return (
+    <div>
+      {/* Dashboard content */}
+      
+      {isFeatureEnabled('subscriptions') && (
+        <SubscriptionBanner userData={userDataGet} />
+      )}
+      
+      {/* More dashboard content */}
+    </div>
+  );
+};
+```
+
+**Result**: The subscription status banner only appears when the `subscriptions` feature is enabled.
+
 ## Testing
 
 To test feature restrictions:

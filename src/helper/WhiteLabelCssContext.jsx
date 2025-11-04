@@ -152,14 +152,21 @@ const applyCssVariables = (cssConfig) => {
         });
       }
       
-      // Apply interactive colors
+      // Apply interactive colors (includes action_link)
       if (cssData.interactive) {
         Object.entries(cssData.interactive).forEach(([key, value]) => {
           root.style.setProperty(`--white-label-interactive-${key}`, value);
         });
       }
       
-      // Apply status colors
+      // Apply button colors (new expanded section)
+      if (cssData.buttons) {
+        Object.entries(cssData.buttons).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-button-${key}`, value);
+        });
+      }
+      
+      // Apply status colors (includes badge colors, online/offline)
       if (cssData.status) {
         Object.entries(cssData.status).forEach(([key, value]) => {
           root.style.setProperty(`--white-label-status-${key}`, value);
@@ -170,6 +177,27 @@ const applyCssVariables = (cssConfig) => {
       if (cssData.text) {
         Object.entries(cssData.text).forEach(([key, value]) => {
           root.style.setProperty(`--white-label-text-${key}`, value);
+        });
+      }
+      
+      // Apply charts colors (new section)
+      if (cssData.charts) {
+        Object.entries(cssData.charts).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-chart-${key}`, value);
+        });
+      }
+      
+      // Apply effects (shadows)
+      if (cssData.effects) {
+        Object.entries(cssData.effects).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-effect-${key}`, value);
+        });
+      }
+      
+      // Apply typography
+      if (cssData.typography) {
+        Object.entries(cssData.typography).forEach(([key, value]) => {
+          root.style.setProperty(`--white-label-typography-${key}`, value);
         });
       }
     }

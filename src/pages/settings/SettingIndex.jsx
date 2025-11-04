@@ -23,9 +23,11 @@ import { Link, useParams } from "react-router-dom";
 import HostDaddy from '../../component/hostDaddy/hostDaddy';
 import PMSSettings from "../account/pmsSettings";
 import { useWhiteLabelCss } from "../../helper/WhiteLabelCssContext";
+import { useFeatureAccess } from "../../helper/useFeatureAccess";
 
 const SettingIndex = () => {
   const { cssConfig, loading: cssLoading } = useWhiteLabelCss();
+  const { isFeatureEnabled } = useFeatureAccess();
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const { section, subsec } = useParams();
