@@ -25,7 +25,9 @@ function pullConversationDataEndPoint(params) {
 }
 
 function listIntegrationPropertiesEndPoint(params) {
-  return api.get(`${URL.LIST_INTEGRATION_PROPERTIES}`);
+  const forceSkipCache = params?.data?.force_skip_cache;
+  const queryParam = forceSkipCache ? '?force_skip_cache=true' : '';
+  return api.get(`${URL.LIST_INTEGRATION_PROPERTIES}${queryParam}`);
 }
 
 function deleteListIntegrationPropertiesEndPoint(params) {

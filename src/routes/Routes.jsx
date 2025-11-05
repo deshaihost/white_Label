@@ -296,6 +296,8 @@ const Routing = () => {
         <Route path="/confirm-email" element={<ConfirmYourEmail />} />
         <Route path="/reset-password" element={<ResetPass />} />
 
+        <Route path="/getstarted" element={<HostBuddyOnlyRoute><GetStarted /></HostBuddyOnlyRoute>}></Route>
+
         {/* Legal pages - HostBuddy domain only */}
         <Route path="/privacy-policy" element={<HostBuddyOnlyRoute><PrivacyPolicy /></HostBuddyOnlyRoute>}></Route>
         <Route path="/termsof-service" element={<HostBuddyOnlyRoute><TermsofService /></HostBuddyOnlyRoute>}></Route>
@@ -314,7 +316,6 @@ const Routing = () => {
 
 
         <Route path="/setup-guide" element={<HostBuddyOnlyRoute><SetupGuide /></HostBuddyOnlyRoute>}></Route>
-        <Route path="/getstarted" element={<HostBuddyOnlyRoute><GetStarted /></HostBuddyOnlyRoute>}></Route>
         <Route path="/hostaway-setup" element={<HostBuddyOnlyRoute><HostawaySetup /></HostBuddyOnlyRoute>}></Route>
 
 
