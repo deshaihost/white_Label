@@ -13,6 +13,7 @@ import ErrorMessageShow from "../../helper/ErrorMessageShow";
 import { ErrorMessageKey } from "../../helper/ErrorMessageKey";
 import { APICore, setAuthorization } from '../../helper/apiCore';
 import axios from "axios";
+import { useWhiteLabelBranding } from "../../helper/useWhiteLabelBranding";
 
 //import Logo from "../../public/img/logo_footer.png";
 const Logo = 'https://hostbuddylb.com/logo/logo_footer.webp';
@@ -25,6 +26,21 @@ const InviteSignup = () => {
   const [loginLoading, setLoginLoading] = useState(false);
   const [acceptLoading, setAcceptLoading] = useState(false);
   const [invitationData, setInvitationData] = useState({});
+
+  // White-label branding
+  const { whiteLabelLogos, isHostBuddyDomain } = useWhiteLabelBranding();
+
+  // Get the appropriate logo based on domain
+  // CRITICAL: White-label domains must NEVER show default HostBuddy logo
+  const getLogoUrl = () => {
+    if (isHostBuddyDomain) {
+      return Logo;
+    }
+    // Return null if no white-label logo available - skeleton loader will show instead
+    return whiteLabelLogos?.full_logo?.url || whiteLabelLogos?.logo?.url || null;
+  };
+
+  const logoUrl = getLogoUrl();
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
   const password = useRef({});
@@ -160,7 +176,17 @@ const InviteSignup = () => {
           <div className="col-lg-6">
             <div className="signup-content auth-content">
               <Link to="/" className="logo">
-                <img src={Logo} alt="logo" />
+                {logoUrl ? (
+                  <img src={logoUrl} alt="logo" />
+                ) : (
+                  <div className="logo-skeleton" style={{
+                    width: '200px',
+                    height: '60px',
+                    backgroundColor: '#e0e0e0',
+                    borderRadius: '8px',
+                    animation: 'pulse 1.5s ease-in-out infinite'
+                  }}></div>
+                )}
               </Link>
               <div className="auth-form">
                 <h2>Accept Team Invitation</h2>

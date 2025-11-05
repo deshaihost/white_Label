@@ -15,12 +15,65 @@ import { useNavigate } from "react-router-dom";
 import ToastHandle from "../../helper/ToastMessage";
 import ErrorMessageShow from "../../helper/ErrorMessageShow";
 import { ErrorMessageKey } from "../../helper/ErrorMessageKey";
+import { getLogo, getCssConfig } from "../../pages/settings/settingContants/whiteLabel/whiteLabelServices";
 
-//import Logo from "../../public/img/logo_footer.png";
-const Logo = 'https://hostbuddylb.com/logo/logo_footer.webp';
-const AuthImage = 'https://hostbuddylb.com/home-new/_Signup.webp';
+// Default images for HostBuddy domain
+const DefaultLogo = 'https://hostbuddylb.com/logo/logo_footer.webp';
+
+// Add dynamic styles to document head for pseudo-elements
+const addDynamicStyles = (css) => {
+  const styleId = 'white-label-signup-styles';
+  let styleElement = document.getElementById(styleId);
+  
+  if (!styleElement) {
+    styleElement = document.createElement('style');
+    styleElement.id = styleId;
+    document.head.appendChild(styleElement);
+  }
+  
+  const placeholderColor = css.text?.secondary || '#888888';
+  const focusBorderColor = css.borders?.active || css.components?.primary || '#0066FF';
+  const focusShadowColor = `${focusBorderColor}33`;
+  const linkColor = css.components?.primary || '#0066FF';
+  
+  styleElement.textContent = `
+    .signup.auth input::placeholder {
+      color: ${placeholderColor} !important;
+      opacity: 0.7;
+    }
+    
+    .signup.auth input:focus {
+      border-color: ${focusBorderColor} !important;
+      box-shadow: 0 0 0 2px ${focusShadowColor} !important;
+      outline: none !important;
+    }
+    
+    .signup.auth .password-box input::placeholder {
+      color: ${placeholderColor} !important;
+      opacity: 0.7;
+    }
+    
+    .signup.auth .password-box input:focus {
+      border-color: ${focusBorderColor} !important;
+      box-shadow: 0 0 0 2px ${focusShadowColor} !important;
+      outline: none !important;
+    }
+    
+    .signup.auth a {
+      color: ${linkColor} !important;
+    }
+    
+    .signup.auth a:hover {
+      color: ${linkColor} !important;
+      opacity: 0.8;
+    }
+  `;
+};
+const DefaultAuthImage = 'https://hostbuddylb.com/home-new/_Signup.webp';
 
 const Signup = () => {
+  console.log('🟢 [Signup] Component rendering');
+  
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,6 +86,15 @@ const Signup = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [emailEntered, setEmailEntered] = useState("");
   const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false);
+
+  // White-label logo states
+  const [whiteLabelLogos, setWhiteLabelLogos] = useState(null);
+  const [isLoadingLogos, setIsLoadingLogos] = useState(true);
+  const [isHostBuddyDomain, setIsHostBuddyDomain] = useState(true);
+
+  // White-label CSS states
+  const [whiteLabelCss, setWhiteLabelCss] = useState(null);
+  const [isLoadingCss, setIsLoadingCss] = useState(true);
 
   // State for discount code field behavior
   const [isDiscountFieldVisible, setIsDiscountFieldVisible] = useState(false);
@@ -69,6 +131,127 @@ const Signup = () => {
       setPartnerValue(partnerQuery);
     }
   }, [location.search, setValue]);
+
+  // Check domain and fetch white-label logos if needed
+  useEffect(() => {
+    const currentDomain = window.location.hostname;
+    const isMainDomain = currentDomain === 'hostbuddy.ai' || currentDomain === 'www.hostbuddy.ai';
+    
+    console.log('🟢 [Signup] Domain check:', {
+      currentDomain,
+      isMainDomain,
+      timestamp: new Date().toISOString()
+    });
+    
+    setIsHostBuddyDomain(isMainDomain);
+    
+    if (!isMainDomain) {
+      console.log('🟢 [Signup] White-label domain detected, fetching logos and CSS...');
+      fetchWhiteLabelLogos(currentDomain);
+      fetchWhiteLabelCss(currentDomain);
+    } else {
+      console.log('🟢 [Signup] HostBuddy domain, using default logos and CSS');
+      setIsLoadingLogos(false);
+      setIsLoadingCss(false);
+    }
+  }, []);
+
+  // Fetch white-label logos using get_logo endpoint
+  const fetchWhiteLabelLogos = async (domain) => {
+    try {
+      console.log('🟢 [Signup] Calling getLogo API for domain:', domain);
+      
+      const response = await getLogo({ domain });
+
+      console.log('🟢 [Signup] API response:', {
+        success: response.success,
+        hasData: !!response.data
+      });
+
+      if (response.success && response.data) {
+        console.log('🟢 [Signup] API response data:', {
+          domain_name: response.data.domain_name,
+          logos_count: response.data.logos_count,
+          has_logo: !!response.data.logos_available?.logo,
+          has_full_logo: !!response.data.logos_available?.full_logo,
+          full_logo_url: response.data.logos_available?.full_logo?.url
+        });
+
+        setWhiteLabelLogos(response.data.logos_available);
+      } else {
+        console.error('🟢 [Signup] Failed to fetch white-label logos:', response.error);
+        setWhiteLabelLogos(null);
+      }
+    } catch (error) {
+      console.error('🟢 [Signup] Error fetching white-label logos:', error);
+      setWhiteLabelLogos(null);
+    } finally {
+      setIsLoadingLogos(false);
+      console.log('🟢 [Signup] Logo loading complete');
+    }
+  };
+
+  // Fetch white-label CSS configuration
+  const fetchWhiteLabelCss = async (domain) => {
+    try {
+      console.log('🟢 [Signup] Calling getCssConfig API for domain:', domain);
+      
+      const response = await getCssConfig({ domain });
+
+      console.log('🟢 [Signup] CSS API response:', {
+        success: response.success,
+        hasData: !!response.data
+      });
+
+      if (response.success && response.data) {
+        console.log('🟢 [Signup] CSS API response data:', {
+          branding_name: response.data.Branding_name,
+          has_css_data: !!response.data.css_data,
+          primary_bg: response.data.css_data?.background?.primary,
+          secondary_bg: response.data.css_data?.background?.secondary
+        });
+
+        setWhiteLabelCss(response.data.css_data);
+        // Apply dynamic styles for pseudo-elements
+        addDynamicStyles(response.data.css_data);
+      } else {
+        console.error('🟢 [Signup] Failed to fetch white-label CSS:', response.error);
+        setWhiteLabelCss(null);
+      }
+    } catch (error) {
+      console.error('🟢 [Signup] Error fetching white-label CSS:', error);
+      setWhiteLabelCss(null);
+    } finally {
+      setIsLoadingCss(false);
+      console.log('🟢 [Signup] CSS loading complete');
+    }
+  };
+
+  // Get the appropriate logo and auth image based on domain
+  // CRITICAL: White-label domains must NEVER show default HostBuddy logo
+  const getLogoUrl = () => {
+    if (isHostBuddyDomain) {
+      console.log('🟢 [Signup] Using default logo for HostBuddy domain');
+      return DefaultLogo;
+    }
+    
+    // Return null if no white-label logo available - skeleton loader will show instead
+    const logoUrl = whiteLabelLogos?.full_logo?.url || whiteLabelLogos?.logo?.url || null;
+    console.log('🟢 [Signup] Using white-label logo:', logoUrl || 'null (skeleton will show)');
+    return logoUrl;
+  };
+
+  const getAuthImageUrl = () => {
+    if (isHostBuddyDomain) {
+      console.log('🟢 [Signup] Using default auth image for HostBuddy domain');
+      return DefaultAuthImage;
+    }
+    
+    // For white-label domains, use full_logo for auth image or hide it
+    const authImageUrl = whiteLabelLogos?.full_logo?.url || null;
+    console.log('🟢 [Signup] Using white-label auth image:', authImageUrl || 'none (hidden)');
+    return authImageUrl;
+  };
 
   const onSubmit = (data) => {
     setEmailEntered(data.email);
@@ -156,31 +339,106 @@ const Signup = () => {
     }
   }, [status, registerUserStatus]);
 
+  // Show loader while fetching white-label logos and CSS (prevents flash of default logo/styles)
+  if (isLoadingLogos || isLoadingCss) {
+    console.log('🟢 [Signup] Showing loader while fetching logos and CSS (preventing flash)');
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        backgroundColor: '#f8f9fa'
+      }}>
+        <Loader />
+      </div>
+    );
+  }
+
+  const logoUrl = getLogoUrl();
+  const authImageUrl = getAuthImageUrl();
+
+  // Get CSS styles for white-label domains
+  const getBackgroundStyle = () => {
+    if (isHostBuddyDomain || !whiteLabelCss) {
+      return {};
+    }
+    
+    const styles = {
+      backgroundColor: whiteLabelCss.background?.primary || '#0F1117'
+    };
+    
+    console.log('🟢 [Signup] Applying background style:', styles);
+    return styles;
+  };
+
+  const getInputStyle = () => {
+    if (isHostBuddyDomain || !whiteLabelCss) {
+      return {};
+    }
+    
+    const styles = {
+      backgroundColor: whiteLabelCss.background?.input || '#0F1117',
+      color: whiteLabelCss.text?.primary || '#FFFFFF',
+      borderColor: whiteLabelCss.borders?.inactive || '#013280',
+      borderWidth: '1px',
+      borderStyle: 'solid'
+    };
+    
+    console.log('🟢 [Signup] Applying input style:', styles);
+    return styles;
+  };
+
+  const getInputFocusStyle = () => {
+    if (isHostBuddyDomain || !whiteLabelCss) {
+      return {};
+    }
+    
+    return {
+      backgroundColor: whiteLabelCss.background?.input || '#0F1117',
+      color: whiteLabelCss.text?.primary || '#FFFFFF',
+      borderColor: whiteLabelCss.borders?.active || whiteLabelCss.components?.primary || '#0066FF',
+      outline: 'none',
+      boxShadow: `0 0 0 2px ${whiteLabelCss.borders?.active || whiteLabelCss.components?.primary || '#0066FF'}33`
+    };
+  };
+
+  console.log('🟢 [Signup] Rendering signup page with:', {
+    isHostBuddyDomain,
+    logoUrl,
+    authImageUrl: authImageUrl || 'hidden',
+    showAuthImage: !!authImageUrl,
+    hasCss: !!whiteLabelCss
+  });
+
   return (
-    <div className="signup auth">
+    <div className="signup auth" style={getBackgroundStyle()}>
       <Helmet>
         <title>Sign Up – HostBuddy AI</title>
         <link rel="canonical" href="https://www.hostbuddy.ai/signup" />
       </Helmet>
       <Container>
         <div className="row">
-          <div className="col-lg-6">
-            <div className="auth-img blur-background-top-right blur-background-bottom-left">
-              <img src={AuthImage} alt="auth-img" />
+          {/* Only show auth image column if we have an image to display */}
+          {authImageUrl && (
+            <div className="col-lg-6">
+              <div className="auth-img blur-background-top-right blur-background-bottom-left">
+                <img src={authImageUrl} alt="auth-img" />
+              </div>
             </div>
-          </div>
-          <div className="col-lg-6">
+          )}
+          <div className={authImageUrl ? "col-lg-6" : "col-lg-12"}>
             <div className="signup-content auth-content">
               {/* <Link to="/" className="logo1">
                 <img src={Logo} alt="logo"  />
               </Link> */}
               <div className="auth-form">
-                <h2>Create An Account</h2>
+                <h2 style={!isHostBuddyDomain && whiteLabelCss ? { color: whiteLabelCss.text?.primary } : {}}>Create An Account</h2>
                 <p>Already have an account? <Link to="/login">Sign in here</Link></p>
                 <form action="" onSubmit={handleSubmit( (data) => { onSubmit(data); } )}>
 
                   <div className="input-container">
-                    <input type="text" {...register("firstName", { required: false })} placeholder="First Name..." value={inputSpaceValidation?.firstName} onInput={(e) => { firstNameSpaceHandle(e); }}/>
+                    <input type="text" {...register("firstName", { required: false })} placeholder="First Name..." value={inputSpaceValidation?.firstName} onInput={(e) => { firstNameSpaceHandle(e); }} style={getInputStyle()}/>
                   </div>
                   {errors.firstName?.type === "required" && (
                     <>
@@ -189,7 +447,7 @@ const Signup = () => {
                   )}
 
                   <div className="input-container">
-                    <input type="text" {...register("lastName", { required: false })} placeholder="Last Name..." value={inputSpaceValidation?.lastName} onInput={(e) => { lastNameSpaceHandle(e) }}/>
+                    <input type="text" {...register("lastName", { required: false })} placeholder="Last Name..." value={inputSpaceValidation?.lastName} onInput={(e) => { lastNameSpaceHandle(e) }} style={getInputStyle()}/>
                   </div>
                   {errors.lastName?.type === "required" && (
                     <>
@@ -202,6 +460,7 @@ const Signup = () => {
                         required: true,
                         pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: `${ErrorMessageKey.INVALID_EMAIL_ADDRESS}` },
                       })}
+                      style={getInputStyle()}
                     />
                   </div>
                   {errors.email?.type === "required" && (
@@ -222,6 +481,7 @@ const Signup = () => {
                           },
                           minLength: { value: 8, message: `${ErrorMessageKey.PASSWORD_MUST_BE_AT_LEAST_8_CHARACTER_LONG}` }, maxLength: 300
                         })}
+                        style={getInputStyle()}
                       />
                       <button type="button" className="eye-btn" style={{ cursor: "pointer" }} onClick={() => { setShowPassword(!showPassword); }}>
                         {!showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
@@ -250,6 +510,7 @@ const Signup = () => {
                         {...register("confirmPassword", { required: true, validate: (value) =>
                             value === password.current || ErrorMessageKey.PASSWORD_DOESNT_MATCH,
                         })}
+                        style={getInputStyle()}
                       />
                       <button type="button" className="eye-btn" style={{ cursor: "pointer" }} onClick={() => { setShowConfirmPassword(!showConfirmPassword); }}>
                         {!showConfirmPassword ? ( <FaRegEye /> ) : ( <FaRegEyeSlash /> )}
@@ -272,13 +533,14 @@ const Signup = () => {
                         placeholder="Discount Code..."
                         {...register("discountCode")}
                         readOnly={!isDiscountFieldEditable}
+                        style={getInputStyle()}
                       />
                       {/* You can add error handling for discountCode if needed */}
                     </div>
                   )}
 
                   <div className="input-container">
-                    <input type="text" placeholder="How did you hear about us? ..." {...register("hear_about_us")} />
+                    <input type="text" placeholder="How did you hear about us? ..." {...register("hear_about_us")} style={getInputStyle()}/>
                   </div>
 
                   <div className="input-container footer-auth">

@@ -13,11 +13,61 @@ import ToastHandle from "../../helper/ToastMessage";
 import Authorized from "../../helper/Authorized";
 import ErrorMessageShow from "../../helper/ErrorMessageShow";
 import { APICore, setAuthorization } from "../../helper/apiCore";
-import { getLogo } from "../../pages/settings/settingContants/whiteLabel/whiteLabelServices";
+import { getLogo, getCssConfig } from "../../pages/settings/settingContants/whiteLabel/whiteLabelServices";
 
 // Default images for HostBuddy domain
 const DefaultLogo = 'https://hostbuddylb.com/logo/logo_footer.webp';
 const DefaultAuthImage = 'https://hostbuddylb.com/home-new/_Signup.webp';
+
+// Add dynamic styles to document head for pseudo-elements
+const addDynamicStyles = (css) => {
+  const styleId = 'white-label-login-styles';
+  let styleElement = document.getElementById(styleId);
+  
+  if (!styleElement) {
+    styleElement = document.createElement('style');
+    styleElement.id = styleId;
+    document.head.appendChild(styleElement);
+  }
+  
+  const placeholderColor = css.text?.secondary || '#888888';
+  const focusBorderColor = css.borders?.active || css.components?.primary || '#0066FF';
+  const focusShadowColor = `${focusBorderColor}33`;
+  const linkColor = css.components?.primary || '#0066FF';
+  
+  styleElement.textContent = `
+    .login.auth input::placeholder {
+      color: ${placeholderColor} !important;
+      opacity: 0.7;
+    }
+    
+    .login.auth input:focus {
+      border-color: ${focusBorderColor} !important;
+      box-shadow: 0 0 0 2px ${focusShadowColor} !important;
+      outline: none !important;
+    }
+    
+    .login.auth .password-box input::placeholder {
+      color: ${placeholderColor} !important;
+      opacity: 0.7;
+    }
+    
+    .login.auth .password-box input:focus {
+      border-color: ${focusBorderColor} !important;
+      box-shadow: 0 0 0 2px ${focusShadowColor} !important;
+      outline: none !important;
+    }
+    
+    .login.auth a {
+      color: ${linkColor} !important;
+    }
+    
+    .login.auth a:hover {
+      color: ${linkColor} !important;
+      opacity: 0.8;
+    }
+  `;
+};
 
 const Login = () => {
   console.log('🔵 [Login] Component rendering');
@@ -36,6 +86,10 @@ const Login = () => {
   const [whiteLabelLogos, setWhiteLabelLogos] = useState(null);
   const [isLoadingLogos, setIsLoadingLogos] = useState(true);
   const [isHostBuddyDomain, setIsHostBuddyDomain] = useState(true);
+  
+  // White-label CSS states
+  const [whiteLabelCss, setWhiteLabelCss] = useState(null);
+  const [isLoadingCss, setIsLoadingCss] = useState(true);
   
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
@@ -57,11 +111,13 @@ const Login = () => {
     setIsHostBuddyDomain(isMainDomain);
     
     if (!isMainDomain) {
-      console.log('🔵 [Login] White-label domain detected, fetching logos...');
+      console.log('🔵 [Login] White-label domain detected, fetching logos and CSS...');
       fetchWhiteLabelLogos(currentDomain);
+      fetchWhiteLabelCss(currentDomain);
     } else {
-      console.log('🔵 [Login] HostBuddy domain, using default logos');
+      console.log('🔵 [Login] HostBuddy domain, using default logos and CSS');
       setIsLoadingLogos(false);
+      setIsLoadingCss(false);
     }
   }, []);
 
@@ -100,6 +156,42 @@ const Login = () => {
     }
   };
 
+  // Fetch white-label CSS configuration
+  const fetchWhiteLabelCss = async (domain) => {
+    try {
+      console.log('🔵 [Login] Calling getCssConfig API for domain:', domain);
+      
+      const response = await getCssConfig({ domain });
+
+      console.log('🔵 [Login] CSS API response:', {
+        success: response.success,
+        hasData: !!response.data
+      });
+
+      if (response.success && response.data) {
+        console.log('🔵 [Login] CSS API response data:', {
+          branding_name: response.data.Branding_name,
+          has_css_data: !!response.data.css_data,
+          primary_bg: response.data.css_data?.background?.primary,
+          secondary_bg: response.data.css_data?.background?.secondary
+        });
+
+        setWhiteLabelCss(response.data.css_data);
+        // Apply dynamic styles for pseudo-elements
+        addDynamicStyles(response.data.css_data);
+      } else {
+        console.error('🔵 [Login] Failed to fetch white-label CSS:', response.error);
+        setWhiteLabelCss(null);
+      }
+    } catch (error) {
+      console.error('🔵 [Login] Error fetching white-label CSS:', error);
+      setWhiteLabelCss(null);
+    } finally {
+      setIsLoadingCss(false);
+      console.log('🔵 [Login] CSS loading complete');
+    }
+  };
+
   // Get the appropriate logo and auth image based on domain
   const getLogoUrl = () => {
     if (isHostBuddyDomain) {
@@ -107,8 +199,10 @@ const Login = () => {
       return DefaultLogo;
     }
     
-    const logoUrl = whiteLabelLogos?.full_logo?.url || whiteLabelLogos?.logo?.url || DefaultLogo;
-    console.log('🔵 [Login] Using white-label logo:', logoUrl);
+    // 🔒 CRITICAL: White-label domains must NEVER show default HostBuddy logo
+    // Return null if no custom logo available - component will handle showing skeleton/nothing
+    const logoUrl = whiteLabelLogos?.full_logo?.url || whiteLabelLogos?.logo?.url || null;
+    console.log('🔵 [Login] White-label logo:', logoUrl || 'NONE - will show skeleton');
     return logoUrl;
   };
 
@@ -229,9 +323,9 @@ const Login = () => {
     }
   }, []);
 
-  // Show loader while fetching white-label logos (prevents flash of default logo)
-  if (isLoadingLogos) {
-    console.log('🔵 [Login] Showing loader while fetching logos (preventing flash)');
+  // Show loader while fetching white-label logos and CSS (prevents flash of default logo/styles)
+  if (isLoadingLogos || isLoadingCss) {
+    console.log('🔵 [Login] Showing loader while fetching logos and CSS (preventing flash)');
     return (
       <div style={{ 
         display: 'flex', 
@@ -248,15 +342,61 @@ const Login = () => {
   const logoUrl = getLogoUrl();
   const authImageUrl = getAuthImageUrl();
 
+  // Get CSS styles for white-label domains
+  const getBackgroundStyle = () => {
+    if (isHostBuddyDomain || !whiteLabelCss) {
+      return {};
+    }
+    
+    const styles = {
+      backgroundColor: whiteLabelCss.background?.primary || '#0F1117'
+    };
+    
+    console.log('🔵 [Login] Applying background style:', styles);
+    return styles;
+  };
+
+  const getInputStyle = () => {
+    if (isHostBuddyDomain || !whiteLabelCss) {
+      return {};
+    }
+    
+    const styles = {
+      backgroundColor: whiteLabelCss.background?.input || '#0F1117',
+      color: whiteLabelCss.text?.primary || '#FFFFFF',
+      borderColor: whiteLabelCss.borders?.inactive || '#013280',
+      borderWidth: '1px',
+      borderStyle: 'solid'
+    };
+    
+    console.log('🔵 [Login] Applying input style:', styles);
+    return styles;
+  };
+
+  const getInputFocusStyle = () => {
+    if (isHostBuddyDomain || !whiteLabelCss) {
+      return {};
+    }
+    
+    return {
+      backgroundColor: whiteLabelCss.background?.input || '#0F1117',
+      color: whiteLabelCss.text?.primary || '#FFFFFF',
+      borderColor: whiteLabelCss.borders?.active || whiteLabelCss.components?.primary || '#0066FF',
+      outline: 'none',
+      boxShadow: `0 0 0 2px ${whiteLabelCss.borders?.active || whiteLabelCss.components?.primary || '#0066FF'}33`
+    };
+  };
+
   console.log('🔵 [Login] Rendering login page with:', {
     isHostBuddyDomain,
     logoUrl,
     authImageUrl: authImageUrl || 'hidden',
-    showAuthImage: !!authImageUrl
+    showAuthImage: !!authImageUrl,
+    hasCss: !!whiteLabelCss
   });
 
   return (
-    <div className="login auth">
+    <div className="login auth" style={getBackgroundStyle()}>
       <Helmet>
         <title>Login – HostBuddy AI</title>
         <link rel="canonical" href="https://www.hostbuddy.ai/login" />
@@ -273,24 +413,46 @@ const Login = () => {
           )}
           <div className={authImageUrl ? "col-lg-6" : "col-lg-12"}>
             <div className="login-content auth-content">
-              <Link to="/" className="logo">
-                <img src={logoUrl} alt="logo" />
-              </Link>
+              {/* 🔒 CRITICAL: Only render logo if available (white-label) or if HostBuddy domain */}
+              {logoUrl ? (
+                <Link to="/" className="logo">
+                  <img src={logoUrl} alt="logo" />
+                </Link>
+              ) : (
+                <div className="logo-skeleton" style={{
+                  width: '200px',
+                  height: '60px',
+                  backgroundColor: '#e0e0e0',
+                  borderRadius: '8px',
+                  margin: '0 auto 30px',
+                  animation: 'pulse 1.5s ease-in-out infinite'
+                }} />
+              )}
               <div className="auth-form">
-                <h2>Welcome Back!</h2>
+                <h2 style={!isHostBuddyDomain && whiteLabelCss ? { color: whiteLabelCss.text?.primary } : {}}>Welcome Back!</h2>
                 <p>
                   Don’t have an account? <Link to="/signup">Sign up</Link>
                 </p>
                 <form action="" onSubmit={handleSubmit( (data) => { onSubmit(data); } )}>
                   <div className="input-container">
-                    <input type="text" {...register("email", { required: true })} placeholder="Email..."/>
+                    <input 
+                      type="text" 
+                      {...register("email", { required: true })} 
+                      placeholder="Email..."
+                      style={getInputStyle()}
+                    />
                   </div>
                   {errors.email?.type === "required" &&
                     <>{ErrorMessageShow("Please enter your email")}</>
                   }
                   <div className="input-container">
                     <div className="password-box">
-                      <input type={showPassword ? "text" : "password"} placeholder="Password..." {...register("password", { required: true })}/>
+                      <input 
+                        type={showPassword ? "text" : "password"} 
+                        placeholder="Password..." 
+                        {...register("password", { required: true })}
+                        style={getInputStyle()}
+                      />
                       <button type="button" className="eye-btn" onClick={() => { setShowPassword(!showPassword); }} style={{ cursor: "pointer" }}>
                         {!showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
                       </button>

@@ -329,7 +329,11 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             timestamp: new Date().toISOString()
           });
           fetchingRef.current = false; // Reset fetch flag
-          // Already set in initial state, just return
+          // Set loading to false since cache data is already in state
+          setLogos(prevState => ({
+            ...prevState,
+            loading: false
+          }));
           return;
         }
         

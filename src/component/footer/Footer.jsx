@@ -9,12 +9,28 @@ import { Link } from "react-router-dom";
 import "./footer.css";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from 'react-icons/fa';
 import BookDemoModal from '../bookDemoModal';
+import { useWhiteLabelBranding } from '../../helper/useWhiteLabelBranding';
 
 // import FooterLogo from "../../public/img/logo_footer.png";
 const FooterLogo = 'https://hostbuddylb.com/logo/logo_footer.webp';
 
 const Footer = () => {
   const [demoModalShow, setDemoModalShow] = useState(false);
+
+  // White-label branding
+  const { whiteLabelLogos, isHostBuddyDomain } = useWhiteLabelBranding();
+
+  // Get the appropriate logo based on domain
+  // CRITICAL: White-label domains must NEVER show default HostBuddy logo
+  const getLogoUrl = () => {
+    if (isHostBuddyDomain) {
+      return FooterLogo;
+    }
+    // Return null if no white-label logo available - skeleton loader will show instead
+    return whiteLabelLogos?.full_logo?.url || whiteLabelLogos?.logo?.url || null;
+  };
+
+  const logoUrl = getLogoUrl();
 
   return (
     <MDBFooter className="text-center text-lg-start text-muted footer">
@@ -24,7 +40,17 @@ const Footer = () => {
             <MDBCol md="4">
               <div className="footer-desc">
                 <Link to="/" className="text-uppercase fw-bold mb-4">
-                  <img src={FooterLogo} alt="footer-logo" />
+                  {logoUrl ? (
+                    <img src={logoUrl} alt="footer-logo" />
+                  ) : (
+                    <div className="logo-skeleton" style={{
+                      width: '150px',
+                      height: '50px',
+                      backgroundColor: '#e0e0e0',
+                      borderRadius: '8px',
+                      animation: 'pulse 1.5s ease-in-out infinite'
+                    }}></div>
+                  )}
                 </Link>
                 <p>
                   Welcome to the Future of Hosting!

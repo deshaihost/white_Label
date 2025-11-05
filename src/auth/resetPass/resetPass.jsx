@@ -12,6 +12,7 @@ import ToastHandle from "../../helper/ToastMessage";
 import ErrorMessageShow from "../../helper/ErrorMessageShow";
 import { ErrorMessageKey } from "../../helper/ErrorMessageKey";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useWhiteLabelBranding } from "../../helper/useWhiteLabelBranding";
 
 //import Logo from "../../public/img/logo_footer.png";
 const Logo = 'https://hostbuddylb.com/logo/logo_footer.webp';
@@ -23,6 +24,21 @@ const ResetPass = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordResetSuccessful, setPasswordResetSuccessful] = useState(false);
+
+  // White-label branding
+  const { whiteLabelLogos, isHostBuddyDomain } = useWhiteLabelBranding();
+
+  // Get the appropriate logo based on domain
+  // CRITICAL: White-label domains must NEVER show default HostBuddy logo
+  const getLogoUrl = () => {
+    if (isHostBuddyDomain) {
+      return Logo;
+    }
+    // Return null if no white-label logo available - skeleton loader will show instead
+    return whiteLabelLogos?.full_logo?.url || whiteLabelLogos?.logo?.url || null;
+  };
+
+  const logoUrl = getLogoUrl();
 
   // Get the "token" query param
   const location = useLocation();
@@ -89,7 +105,17 @@ const ResetPass = () => {
           <div className="col-lg-6">
             <div className="signup-content auth-content">
               <Link to="/" className="logo">
-                <img src={Logo} alt="logo" />
+                {logoUrl ? (
+                  <img src={logoUrl} alt="logo" />
+                ) : (
+                  <div className="logo-skeleton" style={{
+                    width: '200px',
+                    height: '60px',
+                    backgroundColor: '#e0e0e0',
+                    borderRadius: '8px',
+                    animation: 'pulse 1.5s ease-in-out infinite'
+                  }}></div>
+                )}
               </Link>
               <div className="auth-form">
                 <h2>Reset Password</h2>

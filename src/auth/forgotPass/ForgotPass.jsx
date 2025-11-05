@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { stateEmptyActions } from "../../redux/actions";
 import Loader from "../../helper/Loader";
 import ToastHandle from "../../helper/ToastMessage";
+import { useWhiteLabelBranding } from "../../helper/useWhiteLabelBranding";
 
 //import Logo from "../../public/img/logo_footer.png";
 const Logo = 'https://hostbuddylb.com/logo/logo_footer.webp';
@@ -18,6 +19,22 @@ const AuthImage = 'https://hostbuddylb.com/home-new/_Signup.webp';
 const ForgotPass = () => {
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
+
+  // White-label branding
+  const { whiteLabelLogos, isHostBuddyDomain } = useWhiteLabelBranding();
+
+  // Get the appropriate logo based on domain
+  // CRITICAL: White-label domains must NEVER show default HostBuddy logo
+  const getLogoUrl = () => {
+    if (isHostBuddyDomain) {
+      return Logo;
+    }
+    // Return null if no white-label logo available - skeleton loader will show instead
+    return whiteLabelLogos?.full_logo?.url || whiteLabelLogos?.logo?.url || null;
+  };
+
+  const logoUrl = getLogoUrl();
+
   const forgetPasswordMessage =
     store?.sendPasswordRestEmailReducer?.sendPasswordRestEmail?.data?.message;
   const forgetPasswordStatus =
@@ -62,7 +79,17 @@ const ForgotPass = () => {
           <div className="col-lg-6">
             <div className="forgot-pass-content auth-content">
               <Link to="/" className="logo">
-                <img src={Logo} alt="logo" />
+                {logoUrl ? (
+                  <img src={logoUrl} alt="logo" />
+                ) : (
+                  <div className="logo-skeleton" style={{
+                    width: '200px',
+                    height: '60px',
+                    backgroundColor: '#e0e0e0',
+                    borderRadius: '8px',
+                    animation: 'pulse 1.5s ease-in-out infinite'
+                  }}></div>
+                )}
               </Link>
               <div className="auth-form">
                 <h2>Welcome Back!</h2>

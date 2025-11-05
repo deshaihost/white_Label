@@ -9,8 +9,15 @@ const LogoNavComponent = ({ type, colour, onlyIcon }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   
-  // CRITICAL: For white label domains, never show default HostBuddy logo during loading/retry
-  // Only show the logo if we're actually on HostBuddy domain OR we have a successful logo URL
+  // 🔒 CRITICAL: White-label domains must NEVER show default HostBuddy logo
+  // STRICT CONDITION-BASED LOGIC (no time assumptions):
+  // 
+  // For HostBuddy domain: Always show default logo ✅
+  // For White-label domains:
+  //   - If loading OR retrying OR no logo URL → Show skeleton/nothing ✅
+  //   - If logo URL exists AND not loading → Show custom logo ✅
+  //   - NEVER show default HostBuddy logo ❌
+  
   const shouldShowLogo = isHostBuddyDomain || (!loading && !isRetrying && fullLogo);
   const logoSrc = isHostBuddyDomain ? logoHeading : fullLogo;
   
