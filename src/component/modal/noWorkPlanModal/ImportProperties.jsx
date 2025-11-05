@@ -16,6 +16,7 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
   const [importLoading, setImportLoading] = useState(false);
   const integrationPropertyList = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.properties
   const integrationPropertiesLoading = store?.listIntegrationPropertiesReducer?.loading;
+  const usedCache = store?.listIntegrationPropertiesReducer?.listIntegrationProperties?.data?.used_cache;
 
   const subscriptionData = getSubscriptionStatus(userData);
   const numPropertiesRemaining = subscriptionData.props_allowed - Object.keys(userData?.property_data || {}).length;
@@ -37,6 +38,11 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
         setHasCalledAPI(true);
       }
   }, [showNoPlan]);
+
+  // Function to refresh properties with force_skip_cache
+  const handleRefresh = () => {
+    dispatch(listIntegrationPropertiesActions({ force_skip_cache: true }));
+  };
 
   // Create a map of duplicate internal names from the original API response
   const [internalNameCounts, setInternalNameCounts] = useState({});
@@ -227,6 +233,35 @@ function ImportPropertiesModal({ handleNoPlanClose, showNoPlan, setNewProperties
               <>
                 <div id="integrate_form1">
                   
+                  {/* Cache notification */}
+                  {usedCache && (
+                    <div style={{
+                      backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                      border: '1px solid rgba(255, 193, 7, 0.5)',
+                      borderRadius: '8px',
+                      padding: '10px 15px',
+                      marginBottom: '15px',
+                      color: '#ffc107',
+                      fontSize: '14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}>
+                      <span>These results contain cached data.</span>
+                      <span 
+                        onClick={handleRefresh}
+                        style={{
+                          color: '#17a2b8',
+                          textDecoration: 'underline',
+                          cursor: 'pointer',
+                          fontWeight: '500'
+                        }}
+                      >
+                        Force Refresh
+                      </span>
+                    </div>
+                  )}
+
                   {/* Search bar */}
                   <input type="text" placeholder="Search properties..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control mb-3"/>
                   

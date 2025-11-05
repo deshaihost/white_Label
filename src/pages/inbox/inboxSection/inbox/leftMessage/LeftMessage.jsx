@@ -1804,6 +1804,8 @@ const getConversationTimestamp = (conversation) => {
 
                             {status === "inquiry" ? (
                               <span className="inquiry-badge">Inquiry</span>
+                            ) : status === "canceled" ? (
+                              <span className="canceled-badge">Canceled</span>
                             ) : (
                               <>
                                 {isToday(departure_date) && (

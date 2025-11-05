@@ -9,6 +9,7 @@ import "../resources/upsells.css";
 import { BoxLoader, FullScreenLoader } from "../../../../helper/Loader";
 import UpsellMessageModal from "../resources/upsellMessageModal";
 import { useWhiteLabelCss } from "../../../../helper/WhiteLabelCssContext";
+import SettingsCalendar from "../../../../components/scheduling/SettingsCalendar";
 
 import { FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 
@@ -41,6 +42,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
   const [messageModalTopText, setMessageModalTopText] = useState("");
   const [messageModalMainText, setMessageModalMainText] = useState("");
   const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
 
   const currentSettingsData = localSettingsData?.[selectedConfig] || {};
   const setCurrentSettingsData = (newData) => {
@@ -110,7 +112,9 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
     if (e.target.value === "add") {
       const newConfigName = window.prompt("Enter a name for the new config");
       if (newConfigName) {
-        setLocalSettingsData({ ...localSettingsData, [newConfigName]:settingsApiData.default }); // warning: this is creating a shallow copy of settingsApiData.default
+        const dailySchedules = {monday: ['00:00', '23:59'], tuesday: ['00:00', '23:59'], wednesday: ['00:00', '23:59'], thursday: ['00:00', '23:59'], friday: ['00:00', '23:59'], saturday: ['00:00', '23:59'], sunday: ['00:00', '23:59']};
+        let newConfigSettings = { enabled: false, properties: [], schedules: { ...dailySchedules } };
+        setLocalSettingsData({ ...localSettingsData, [newConfigName]:newConfigSettings });
         setSelectedConfig(newConfigName);
       }
     } else {
@@ -119,6 +123,17 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
       const selectedOptions = selectedProperties.map((propertyName) => ({ value: propertyName, label: propertyName }));
       setSelectedOptions(selectedOptions);
     }
+  }
+
+  const handleScheduleClick = (event) => {
+    event.preventDefault();
+    setShowScheduleModal(true);
+  }
+
+  // Given a new schedule object (from the modal): set it as the schedule for the currently selected config
+  const setScheduleData = (newScheduleData) => {
+    const newSettings = { ...localSettingsData[selectedConfig], schedules:newScheduleData };
+    setCurrentSettingsData(newSettings);
   }
 
 
@@ -342,6 +357,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
                 <div ref={selectRef}>
                   <Select className="custom-select property_Custom_Select" isMulti options={options} value={selectedOptions} onChange={handleChange} placeholder="Select properties..." components={{ ValueContainer, MultiValueContainer: () => null }} hideSelectedOptions={false} closeMenuOnSelect={false} styles={customStyles} menuIsOpen={menuIsOpen} onMenuOpen={() => setMenuIsOpen(true)} onMenuClose={() => setMenuIsOpen(false)}/>
                 </div>
+                <a href="#" style={{marginTop:'10px', fontSize:'16px', display:'block', textAlign:'center'}} onClick={handleScheduleClick}>Configure Timing</a>
               </>
             )}
           </div>
@@ -698,6 +714,7 @@ const PreStayUpsells = ({setSection, settingsApiData, setSettingsApiData, localS
         </div>
       </div>
       <UpsellMessageModal headerText={messageModalHeaderText} bodyTopText={messageModalTopText} bodyMainText={messageModalMainText} show={showMessageModal} handleClose={() => setShowMessageModal(false)} ai_personalization={currentSettingsData.ai_personalization}/>
+      <SettingsCalendar scheduleData={localSettingsData?.[selectedConfig]?.schedules} setScheduleData={setScheduleData} showSchedule={showScheduleModal} setShowSchedule={setShowScheduleModal}/>
     </div>
   );
 };
