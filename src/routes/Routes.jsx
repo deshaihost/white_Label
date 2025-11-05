@@ -27,6 +27,7 @@ import StatisticsPage from "../pages/statistics/statistics";
 import ProtectedRoute from "./ProtectedRoute";
 import FeatureProtectedRoute from "./FeatureProtectedRoute";
 import FeatureProtectedUnauthRoute from "./FeatureProtectedUnauthRoute";
+import HostBuddyOnlyRoute from "./HostBuddyOnlyRoute";
 import ScrollToTop from "../helper/ScrollToTop";
 import QuestionnairePage from "../pages/properties/addProperties/dynamic_questionnaire/complete_questionnaire";
 import GuidedSetup from "../pages/properties/addProperties/guided_setup/guidedSetup";
@@ -400,6 +401,11 @@ const Routing = () => {
           }
         />
         
+        {/* Email confirmation - always accessible */}
+        <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
+        <Route path="/email_confirmation" element={<EmailConfirmationAction />}></Route>
+        <Route path="/reset-password" element={<ResetPass />}></Route>
+
         {/* Agreement pages - only on hostbuddy.ai */}
         <Route 
           path="/privacy-policy" 
@@ -433,89 +439,6 @@ const Routing = () => {
             </PublicRouteGuard>
           } 
         />
-        
-        {/* Guide pages - only on hostbuddy.ai */}
-        <Route
-          path="/scheduling-walkthrough"
-          element={
-            <PublicRouteGuard>
-              <SchedulingWalkthrough />
-            </PublicRouteGuard>
-          }
-        ></Route>
-        <Route 
-          path="/tips-and-tricks" 
-          element={
-            <PublicRouteGuard>
-              <TipsAndTricks />
-            </PublicRouteGuard>
-          } 
-        />
-        <Route 
-          path="/best-practices" 
-          element={
-            <PublicRouteGuard>
-              <BestPractices />
-            </PublicRouteGuard>
-          } 
-        />
-        <Route 
-          path="/schedule-guide" 
-          element={
-            <PublicRouteGuard>
-              <ScheduleHostBuddy />
-            </PublicRouteGuard>
-          } 
-        />
-        <Route
-          path="/notifications-guide"
-          element={
-            <PublicRouteGuard>
-              <NotificationsGuide />
-            </PublicRouteGuard>
-          }
-        ></Route>
-        <Route
-          path="/customize-hostbuddy-guide"
-          element={
-            <PublicRouteGuard>
-              <CustomizeHostBuddyGuide />
-            </PublicRouteGuard>
-          }
-        ></Route>
-        <Route
-          path="/hostbuddy-for-guesty"
-          element={
-            <PublicRouteGuard>
-              <HostbuddyForGuesty />
-            </PublicRouteGuard>
-          }
-        ></Route>
-        <Route 
-          path="/hostbuddy-for-tidy" 
-          element={
-            <PublicRouteGuard>
-              <Home />
-            </PublicRouteGuard>
-          } 
-        />
-
-        <Route 
-          path="/testing-questions" 
-          element={
-            <PublicRouteGuard>
-              <TestingQuestions />
-            </PublicRouteGuard>
-          } 
-        />
-        
-        {/* Email confirmation - always accessible */}
-        <Route path="/confirm-email" element={<ConfirmYourEmail />}></Route>
-        <Route
-          path="/email_confirmation"
-          element={<EmailConfirmationAction />}
-        ></Route>
-        <Route path="/reset-password" element={<ResetPass />}></Route>
         
         {/* Setup and onboarding - only on hostbuddy.ai */}
         <Route 
@@ -561,6 +484,7 @@ const Routing = () => {
           } 
         />
 
+        {/* PMS instructions - only on hostbuddy.ai */}
         <Route 
           path="/pms-instructions" 
           element={
@@ -650,41 +574,11 @@ const Routing = () => {
           }
         />
 
+        {/* Marketing/feature pages - only on hostbuddy.ai */}
         <Route path="/ai-messaging" element={<PublicRouteGuard><AiMessaging /></PublicRouteGuard>} />
         <Route path="/smart-templates" element={<PublicRouteGuard><SmartTemplatesLanding /></PublicRouteGuard>} />
-
         <Route path="/become-an-affiliate" element={<PublicRouteGuard><BecomeAnAffiliate /></PublicRouteGuard>} />
         <Route path="/software-solutions" element={<PublicRouteGuard><SoftwareSolutions /></PublicRouteGuard>} />
-        {/* Commented duplicate wildcard route - keeping for reference */}
-        {/* <Route
-          path="*"
-          element={
-            <ThankError
-              imgSrc={ErrorImg}
-              text="We cannot find the page you're looking for"
-            />
-          }
-        /> */}
-        <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
-        <Route
-          path="/software-solutions"
-          element={<SoftwareSolutions />}
-        ></Route>
-        {/* Commented duplicate wildcard route - keeping for reference */}
-        {/* <Route
-          path="*"
-          element={
-            <ThankError
-              imgSrc={ErrorImg}
-              text="We cannot find the page you're looking for"
-            />
-          }
-        /> */}
-        <Route path="/become-an-affiliate" element={<BecomeAnAffiliate />} />
-        <Route
-          path="/software-solutions"
-          element={<SoftwareSolutions />}
-        ></Route>
 
         {/* Protected routes - require authentication */}
         <Route
@@ -827,9 +721,13 @@ const Routing = () => {
           }
         />
 
+        {/* Marketing/integration pages - only on hostbuddy.ai */}
         <Route path="/integrations" element={<PublicRouteGuard><Integrations /></PublicRouteGuard>} />
         <Route path="/turno" element={<PublicRouteGuard><Turno /></PublicRouteGuard>} />
+        <Route path="/hostbuddy-for-guesty" element={<PublicRouteGuard><HostbuddyForGuesty /></PublicRouteGuard>}></Route>
+        <Route path="/hostbuddy-for-tidy" element={<PublicRouteGuard><Home /></PublicRouteGuard>}></Route>
 
+        {/* Test and property pages */}
         <Route path="/test-property/:id" element={<TestProperty />}></Route>
         <Route path="/workbench/:property_name" element={<Workbench />}></Route>
         <Route path="/workbench-multi/:multi_property_id" element={<WorkbenchMulti />}></Route>

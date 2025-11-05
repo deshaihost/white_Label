@@ -51,6 +51,28 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
   const [getPostStayUpcomingMessagesLoading, setGetPostStayUpcomingMessagesLoading] = useState(false);
   const [getInquiryWinbacksUpcomingMessagesLoading, setGetInquiryWinbacksUpcomingMessagesLoading] = useState(false);
 
+  // For each config - if there is no schedule data, initialize it with a default schedule.
+  // Then set this data in the state.
+  const initializeScheduleData = async (apiData, upsell_type) => {
+    const dailySchedules = {monday: ['00:00', '23:59'], tuesday: ['00:00', '23:59'], wednesday: ['00:00', '23:59'], thursday: ['00:00', '23:59'], friday: ['00:00', '23:59'], saturday: ['00:00', '23:59'], sunday: ['00:00', '23:59']};
+  
+    for (const key in apiData) {
+      if (key !== 'default' && !apiData[key].hasOwnProperty('schedules')) {
+        apiData[key]['schedules'] = structuredClone(dailySchedules);
+      }
+    }
+  
+    if (upsell_type === 'pre_stay') {
+      setPreStaySettingsApiData(apiData);
+      setPreStayLocalSettingsData(apiData);
+    } else if (upsell_type === 'post_stay') {
+      setPostStaySettingsApiData(apiData);
+      setPostStayLocalSettingsData(apiData);
+    } else if (upsell_type === 'inquiry_winback') {
+      setInquiryWinbacksSettingsApiData(apiData);
+      setInquiryWinbacksLocalSettingsData(apiData);
+    }
+  }
 
   // Call the API to get all the user's settings
   const callGetSettingsApi = async (upsell_type) => {
@@ -71,17 +93,12 @@ const UpsellsIndex = ({allPropertyNamesList}) => {
       if (response.status === 200 && response?.data?.upsell_settings) {
         if (upsell_type === 'pre_stay') {
           setGetPreStaySettingsLoading(false);
-          setPreStaySettingsApiData(response?.data?.upsell_settings);
-          setPreStayLocalSettingsData(response?.data?.upsell_settings); // Warning: preStaySettingsApiData and preStayLocalSettingsData become shallow copies of each other. Seems not to matter for our use
         } else if (upsell_type === 'post_stay') {
           setGetPostStaySettingsLoading(false);
-          setPostStaySettingsApiData(response?.data?.upsell_settings);
-          setPostStayLocalSettingsData(response?.data?.upsell_settings);
         } else if (upsell_type === 'inquiry_winback') {
           setGetInquiryWinbacksSettingsLoading(false);
-          setInquiryWinbacksSettingsApiData(response?.data?.upsell_settings);
-          setInquiryWinbacksLocalSettingsData(response?.data?.upsell_settings);
         }
+        initializeScheduleData(response?.data?.upsell_settings, upsell_type);
       }
       else { }
     } catch (error) {

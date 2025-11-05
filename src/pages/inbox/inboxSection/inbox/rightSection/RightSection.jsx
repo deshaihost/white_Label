@@ -2587,7 +2587,7 @@ const callUpdateGuestDataApi = async () => {
         ) : (
           <div className="toggle">
             <p style={{ fontSize: "12px" }}>
-              {showBranding ? brandingName : "..."} is{" "}
+              HostBuddy is{" "}
               <span style={{ color: "rgb(200,0,0)" }}>NOT RESPONDING</span> to
               this guest.
             </p>

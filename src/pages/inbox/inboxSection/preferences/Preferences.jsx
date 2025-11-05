@@ -7,7 +7,7 @@ import axios from "axios";
 import ToastHandle from "../../../../helper/ToastMessage";
 import "./Preferences.css";
 import "./SettingIndex.css";
-import SettingsCalender from "./settingsCalendar";
+import SettingsCalendar from "../../../../components/scheduling/SettingsCalendar";
 import { FullScreenLoader } from "../../../../helper/Loader";
 import { useSelector } from "react-redux";
 import { getSubscriptionStatus } from '../../../../helper/Authorized';
@@ -909,7 +909,7 @@ const AdvancedSettingsIndex = ({allPropertyNamesList}) => {
           </div>
         </div>
       </div>
-      <SettingsCalender scheduleData={localSettingsData?.[selectedConfig]?.schedules} setScheduleData={setScheduleData} showSchedule={showScheduleModal} setShowSchedule={setShowScheduleModal}/>
+      <SettingsCalendar scheduleData={localSettingsData?.[selectedConfig]?.schedules} setScheduleData={setScheduleData} showSchedule={showScheduleModal} setShowSchedule={setShowScheduleModal}/>
     </div>
   );
 };
