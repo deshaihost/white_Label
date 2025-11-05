@@ -322,13 +322,18 @@ const Routing = () => {
       return false;
     }
     
-    // For white label domains (not hostbuddy.ai, not localhost), only show NavBar if user is authenticated
-    if (!isMainDomain && !isLocal) {
-      return !!authData;
+    // CRITICAL: Never show NavBar if user is authenticated (logged in)
+    if (authData) {
+      return false;
     }
     
-    // For hostbuddy.ai and localhost, show NavBar based on auth state or public pages
-    return !authData || shouldUseUserNavBar;
+    // For white label domains (not hostbuddy.ai, not localhost), redirect to login (no NavBar)
+    if (!isMainDomain && !isLocal) {
+      return false;
+    }
+    
+    // For hostbuddy.ai and localhost, show NavBar only on public pages when NOT authenticated
+    return shouldUseUserNavBar;
   };
 
   const content = (

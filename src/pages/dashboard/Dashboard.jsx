@@ -14,7 +14,6 @@ import AccountNotifBanner from "../../component/accountNotifBanner/accountNotifB
 import SubscriptionBanner from "../../component/accountNotifBanner/subscriptionBanner";
 import "react-circular-progressbar/dist/styles.css";
 import ToastHandle from "../../helper/ToastMessage";
-import { Helmet } from "react-helmet";
 import { FaCircleCheck, FaCheck } from "react-icons/fa6";
 import ConverSationtranscriptModel from "../propertyInsight/transcriptsTable/transcriptsModel/ConverSationtranscriptModel";
 import HostDaddy from "../../component/hostDaddy/hostDaddy";
@@ -406,9 +405,6 @@ const Dashboard = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Dashboard - {isWhiteLabel ? `${displayName} AI` : 'HostBuddy AI'}</title>
-      </Helmet>{" "}
       {propertiesConversationLoading && <FullScreenLoader />}
       {completeActionsItemLoading && <FullScreenLoader />}
       <div 
