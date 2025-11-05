@@ -13,12 +13,15 @@ import ToastHandle from "../../helper/ToastMessage";
 import Authorized from "../../helper/Authorized";
 import ErrorMessageShow from "../../helper/ErrorMessageShow";
 import { APICore, setAuthorization } from "../../helper/apiCore";
+import { getLogo } from "../../pages/settings/settingContants/whiteLabel/whiteLabelServices";
 
-//import Logo from "../../public/img/logo_footer.png";
-const Logo = 'https://hostbuddylb.com/logo/logo_footer.webp';
-const AuthImage = 'https://hostbuddylb.com/home-new/_Signup.webp';
+// Default images for HostBuddy domain
+const DefaultLogo = 'https://hostbuddylb.com/logo/logo_footer.webp';
+const DefaultAuthImage = 'https://hostbuddylb.com/home-new/_Signup.webp';
 
 const Login = () => {
+  console.log('🔵 [Login] Component rendering');
+  
   const store = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,11 +31,98 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [emailEntered, setEmailEntered] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
+  
+  // White-label logo states
+  const [whiteLabelLogos, setWhiteLabelLogos] = useState(null);
+  const [isLoadingLogos, setIsLoadingLogos] = useState(true);
+  const [isHostBuddyDomain, setIsHostBuddyDomain] = useState(true);
+  
   const loginStatus = store?.loginReducer?.login?.status;
   const loginMessage = store?.loginReducer?.login?.message;
   const loginLoading = store?.loginReducer?.loading;
   const isGcs = store?.loginReducer?.login?.gcs;
   const { register, handleSubmit, formState: { errors } } = useForm({defaultValues: {login_remember:false}});
+
+  // Check domain and fetch white-label logos if needed
+  useEffect(() => {
+    const currentDomain = window.location.hostname;
+    const isMainDomain = currentDomain === 'hostbuddy.ai' || currentDomain === 'www.hostbuddy.ai';
+    
+    console.log('🔵 [Login] Domain check:', {
+      currentDomain,
+      isMainDomain,
+      timestamp: new Date().toISOString()
+    });
+    
+    setIsHostBuddyDomain(isMainDomain);
+    
+    if (!isMainDomain) {
+      console.log('🔵 [Login] White-label domain detected, fetching logos...');
+      fetchWhiteLabelLogos(currentDomain);
+    } else {
+      console.log('🔵 [Login] HostBuddy domain, using default logos');
+      setIsLoadingLogos(false);
+    }
+  }, []);
+
+  // Fetch white-label logos using get_logo endpoint
+  const fetchWhiteLabelLogos = async (domain) => {
+    try {
+      console.log('🔵 [Login] Calling getLogo API for domain:', domain);
+      
+      const response = await getLogo({ domain });
+
+      console.log('🔵 [Login] API response:', {
+        success: response.success,
+        hasData: !!response.data
+      });
+
+      if (response.success && response.data) {
+        console.log('🔵 [Login] API response data:', {
+          domain_name: response.data.domain_name,
+          logos_count: response.data.logos_count,
+          has_logo: !!response.data.logos_available?.logo,
+          has_full_logo: !!response.data.logos_available?.full_logo,
+          full_logo_url: response.data.logos_available?.full_logo?.url
+        });
+
+        setWhiteLabelLogos(response.data.logos_available);
+      } else {
+        console.error('🔵 [Login] Failed to fetch white-label logos:', response.error);
+        setWhiteLabelLogos(null);
+      }
+    } catch (error) {
+      console.error('🔵 [Login] Error fetching white-label logos:', error);
+      setWhiteLabelLogos(null);
+    } finally {
+      setIsLoadingLogos(false);
+      console.log('🔵 [Login] Logo loading complete');
+    }
+  };
+
+  // Get the appropriate logo and auth image based on domain
+  const getLogoUrl = () => {
+    if (isHostBuddyDomain) {
+      console.log('🔵 [Login] Using default logo for HostBuddy domain');
+      return DefaultLogo;
+    }
+    
+    const logoUrl = whiteLabelLogos?.full_logo?.url || whiteLabelLogos?.logo?.url || DefaultLogo;
+    console.log('🔵 [Login] Using white-label logo:', logoUrl);
+    return logoUrl;
+  };
+
+  const getAuthImageUrl = () => {
+    if (isHostBuddyDomain) {
+      console.log('🔵 [Login] Using default auth image for HostBuddy domain');
+      return DefaultAuthImage;
+    }
+    
+    // For white-label domains, use full_logo for auth image or hide it
+    const authImageUrl = whiteLabelLogos?.full_logo?.url || null;
+    console.log('🔵 [Login] Using white-label auth image:', authImageUrl || 'none (hidden)');
+    return authImageUrl;
+  };
 
   // Only redirect to white label if explicitly coming from a known white label domain
   useEffect(() => {
@@ -139,6 +229,32 @@ const Login = () => {
     }
   }, []);
 
+  // Show loader while fetching white-label logos (prevents flash of default logo)
+  if (isLoadingLogos) {
+    console.log('🔵 [Login] Showing loader while fetching logos (preventing flash)');
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        backgroundColor: '#f8f9fa'
+      }}>
+        <Loader />
+      </div>
+    );
+  }
+
+  const logoUrl = getLogoUrl();
+  const authImageUrl = getAuthImageUrl();
+
+  console.log('🔵 [Login] Rendering login page with:', {
+    isHostBuddyDomain,
+    logoUrl,
+    authImageUrl: authImageUrl || 'hidden',
+    showAuthImage: !!authImageUrl
+  });
+
   return (
     <div className="login auth">
       <Helmet>
@@ -147,15 +263,18 @@ const Login = () => {
       </Helmet>
       <Container>
         <div className="row">
-          <div className="col-lg-6">
-            <div className="auth-img blur-background-top-right blur-background-bottom-left">
-              <img src={AuthImage} alt="auth-img" />
+          {/* Only show auth image column if we have an image to display */}
+          {authImageUrl && (
+            <div className="col-lg-6">
+              <div className="auth-img blur-background-top-right blur-background-bottom-left">
+                <img src={authImageUrl} alt="auth-img" />
+              </div>
             </div>
-          </div>
-          <div className="col-lg-6">
+          )}
+          <div className={authImageUrl ? "col-lg-6" : "col-lg-12"}>
             <div className="login-content auth-content">
               <Link to="/" className="logo">
-                <img src={Logo} alt="logo" />
+                <img src={logoUrl} alt="logo" />
               </Link>
               <div className="auth-form">
                 <h2>Welcome Back!</h2>

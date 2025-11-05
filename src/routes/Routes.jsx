@@ -87,24 +87,25 @@ import Turno from "../pages/turno/Turno";
 import CustomerJourney from "../pages/customerJourney/customerJourney";
 
 // Helper function to check if current domain is HostBuddy main domain
+// ONLY hostbuddy.ai is considered the main domain
+// localhost and all other domains are treated as white-label domains
 const isHostBuddyDomain = () => {
   const hostname = window.location.hostname;
   return hostname === 'hostbuddy.ai' || hostname === 'www.hostbuddy.ai';
 };
 
-// Helper function to check if current domain is localhost
+// Helper function to check if current domain is localhost (REMOVED - no longer needed)
+// Localhost is now treated as white-label domain
 const isLocalhost = () => {
-  const hostname = window.location.hostname;
-  return hostname === 'localhost' || hostname === '127.0.0.1';
+  return false; // Always return false - localhost is treated as white-label
 };
 
 // Component to protect public routes on white label domains
 const PublicRouteGuard = ({ children, allowOnWhiteLabel = false }) => {
   const isMainDomain = isHostBuddyDomain();
-  const isLocal = isLocalhost();
   
-  // Allow on HostBuddy domain or localhost
-  if (isMainDomain || isLocal) {
+  // Allow ONLY on HostBuddy domain (localhost is now white-label)
+  if (isMainDomain) {
     return children;
   }
   
@@ -113,7 +114,7 @@ const PublicRouteGuard = ({ children, allowOnWhiteLabel = false }) => {
     return children;
   }
   
-  // Otherwise, redirect to login (for white label domains only)
+  // Otherwise, redirect to login (for white label domains including localhost)
   console.log('🔒 PublicRouteGuard: Redirecting to /login (white label domain)');
   return <Navigate to="/login" replace />;
 };
@@ -121,29 +122,27 @@ const PublicRouteGuard = ({ children, allowOnWhiteLabel = false }) => {
 // Component for root path that prevents flash on white label domains
 const RootPathGuard = () => {
   const isMainDomain = isHostBuddyDomain();
-  const isLocal = isLocalhost();
   
-  // For white label domains, redirect immediately without rendering Home
-  if (!isMainDomain && !isLocal) {
+  // For white label domains (including localhost), redirect immediately without rendering Home
+  if (!isMainDomain) {
     return <Navigate to="/login" replace />;
   }
   
-  // For hostbuddy.ai and localhost, render Home
+  // For hostbuddy.ai ONLY, render Home
   return <Home />;
 };
 
 // Component for 404 page that works correctly with white label domains
 const NotFoundPage = () => {
   const isMainDomain = isHostBuddyDomain();
-  const isLocal = isLocalhost();
   
-  // For white label domains, redirect to login instead of showing 404
+  // For white label domains (including localhost), redirect to login instead of showing 404
   // (since they shouldn't have access to public pages anyway)
-  if (!isMainDomain && !isLocal) {
+  if (!isMainDomain) {
     return <Navigate to="/login" replace />;
   }
   
-  // For hostbuddy.ai and localhost, show 404 page
+  // For hostbuddy.ai ONLY, show 404 page
   return (
     <ThankError
       imgSrc={ErrorImg}
@@ -314,7 +313,6 @@ const Routing = () => {
   // Check if NavBar should be shown based on domain and authentication
   const shouldShowNavBar = () => {
     const isMainDomain = isHostBuddyDomain();
-    const isLocal = isLocalhost();
     
     // Always hide NavBar on these paths regardless of domain
     const authPaths = ["/login", "/signup", "/reset-password", "/accept-invitation", "/forgot", "/client-login", "/test-show-conversations"];
@@ -327,12 +325,12 @@ const Routing = () => {
       return false;
     }
     
-    // For white label domains (not hostbuddy.ai, not localhost), redirect to login (no NavBar)
-    if (!isMainDomain && !isLocal) {
+    // For white label domains (including localhost), redirect to login (no NavBar)
+    if (!isMainDomain) {
       return false;
     }
     
-    // For hostbuddy.ai and localhost, show NavBar only on public pages when NOT authenticated
+    // For hostbuddy.ai ONLY, show NavBar only on public pages when NOT authenticated
     return shouldUseUserNavBar;
   };
 
