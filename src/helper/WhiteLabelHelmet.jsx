@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { useWhiteLabelCss } from './WhiteLabelCssContext';
 import { useWhiteLabelLogos } from './WhiteLabelLogoContext';
-import { updateWhiteLabelFavicon } from './faviconManager';
+import { updateWhiteLabelFavicon, applyPlaceholderFavicon } from './faviconManager';
 
 /**
  * WhiteLabelHelmet Component
@@ -12,17 +12,23 @@ import { updateWhiteLabelFavicon } from './faviconManager';
  * Favicon is managed by faviconManager.js
  */
 const WhiteLabelHelmet = () => {
-  const { cssConfig, loading: cssLoading, isHostBuddyDomain } = useWhiteLabelCss();
-  const { logo: logoUrl, loading: logoLoading } = useWhiteLabelLogos();
+  const { cssConfig, loading: cssLoading, error: cssError, isHostBuddyDomain } = useWhiteLabelCss();
+  const { logo: logoUrl, loading: logoLoading, error: logoError, hasFetchFailed } = useWhiteLabelLogos();
   const location = useLocation();
   
-  // Update favicon when white-label logo loads
+  // Update favicon when white-label logo loads OR when it fails
   useEffect(() => {
-    if (!cssLoading && !logoLoading && !isHostBuddyDomain && logoUrl) {
-      console.log('🎨 [WhiteLabelHelmet] White-label logo ready, updating favicon');
-      updateWhiteLabelFavicon(logoUrl);
+    if (!cssLoading && !logoLoading && !isHostBuddyDomain) {
+      if (logoUrl) {
+        console.log('🎨 [WhiteLabelHelmet] White-label logo ready, updating favicon');
+        updateWhiteLabelFavicon(logoUrl);
+      } else if (hasFetchFailed || logoError) {
+        // Logo fetch failed - apply loading placeholder (NOT default HostBuddy favicon)
+        console.log('⚠️ [WhiteLabelHelmet] Logo fetch failed, applying loading placeholder favicon');
+        applyPlaceholderFavicon();
+      }
     }
-  }, [logoUrl, cssLoading, logoLoading, isHostBuddyDomain]);
+  }, [logoUrl, logoError, hasFetchFailed, cssLoading, logoLoading, isHostBuddyDomain]);
   
   // Helper function to get page name from route
   const getPageName = (pathname) => {

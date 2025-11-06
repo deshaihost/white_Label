@@ -76,8 +76,6 @@ export const initializeFavicon = (isHostBuddyDomain, customLogoUrl = null) => {
 
   const defaultFavicon = '/favicon-hostbuddy.ico';
   
-  // CRITICAL FIX: For white-label domains, DO NOT show any favicon until custom logo loads
-  // This prevents the flash of default favicon
   if (isHostBuddyDomain) {
     // HostBuddy domain: immediately show default favicon
     updateFavicon(defaultFavicon);
@@ -85,7 +83,7 @@ export const initializeFavicon = (isHostBuddyDomain, customLogoUrl = null) => {
     // White-label domain WITH logo: show custom favicon
     updateFavicon(customLogoUrl);
   } else {
-    // White-label domain WITHOUT logo yet: remove all favicons (prevent flash)
+    // White-label domain WITHOUT logo yet: remove all favicons initially
     console.log('⏳ [FaviconManager] White-label domain - waiting for custom logo...');
     removeAllFavicons();
   }
@@ -100,6 +98,21 @@ export const updateWhiteLabelFavicon = (logoUrl) => {
     console.log('🎨 [FaviconManager] Updating white-label favicon:', logoUrl);
     updateFavicon(logoUrl);
   }
+};
+
+/**
+ * Apply a generic placeholder favicon when white-label logo fetch fails
+ * This prevents empty favicon state on API failures
+ * Shows a pulsing/loading indicator instead of empty or default favicon
+ */
+export const applyPlaceholderFavicon = () => {
+  console.log('🔄 [FaviconManager] Applying loading placeholder favicon for white-label domain');
+  
+  // Create an animated loading indicator SVG favicon
+  // Simple pulsing circle to indicate loading state
+  const loadingFaviconSvg = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%23808080" stroke-width="8"><animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/></circle></svg>`;
+  
+  updateFavicon(loadingFaviconSvg);
 };
 
 /**

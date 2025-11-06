@@ -4,10 +4,9 @@ import { getActiveToken } from './apiCore';
 
 const WhiteLabelLogoContext = createContext();
 
-// Cache key for localStorage
+// Cache key for sessionStorage (persists for session, not time-based)
 const LOGO_CACHE_KEY = 'whiteLabelLogosCache';
-const CACHE_EXPIRY_KEY = 'whiteLabelLogosCacheExpiry';
-const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
+const LOGO_FETCH_STATUS_KEY = 'whiteLabelLogosFetchStatus';
 
 export const useWhiteLabelLogos = () => {
   const context = useContext(WhiteLabelLogoContext);
@@ -26,45 +25,27 @@ const getCachedLogos = (domainName) => {
   });
   
   try {
-    const cachedData = localStorage.getItem(LOGO_CACHE_KEY);
-    const cacheExpiry = localStorage.getItem(CACHE_EXPIRY_KEY);
+    const cachedData = sessionStorage.getItem(LOGO_CACHE_KEY);
     
-    if (cachedData && cacheExpiry) {
-      const expiryTime = parseInt(cacheExpiry, 10);
-      const now = Date.now();
-      
-      if (now < expiryTime) {
-        const parsedCache = JSON.parse(cachedData);
-        if (parsedCache.domain === domainName) {
-          const elapsed = performance.now() - cacheStart;
-          const remainingTime = Math.floor((expiryTime - now) / 1000 / 60);
-          console.log('✅ [CACHE] Cache HIT! Using cached logos', {
-            domain: domainName,
-            cachedTimestamp: new Date(parsedCache.timestamp).toISOString(),
-            expiresIn: `${remainingTime} minutes`,
-            cacheReadTime: `${elapsed.toFixed(2)}ms`,
-            timestamp: new Date().toISOString()
-          });
-          return parsedCache;
-        } else {
-          const elapsed = performance.now() - cacheStart;
-          console.log('❌ [CACHE] Cache MISS - Domain mismatch', {
-            requestedDomain: domainName,
-            cachedDomain: parsedCache.domain,
-            cacheReadTime: `${elapsed.toFixed(2)}ms`,
-            timestamp: new Date().toISOString()
-          });
-        }
-      } else {
+    if (cachedData) {
+      const parsedCache = JSON.parse(cachedData);
+      if (parsedCache.domain === domainName) {
         const elapsed = performance.now() - cacheStart;
-        console.log('⏰ [CACHE] Cache EXPIRED - Clearing old cache', {
-          expiredAt: new Date(expiryTime).toISOString(),
+        console.log('✅ [CACHE] Cache HIT! Using cached logos', {
+          domain: domainName,
+          cachedTimestamp: new Date(parsedCache.timestamp).toISOString(),
           cacheReadTime: `${elapsed.toFixed(2)}ms`,
           timestamp: new Date().toISOString()
         });
-        // Cache expired, clear it
-        localStorage.removeItem(LOGO_CACHE_KEY);
-        localStorage.removeItem(CACHE_EXPIRY_KEY);
+        return parsedCache;
+      } else {
+        const elapsed = performance.now() - cacheStart;
+        console.log('❌ [CACHE] Cache MISS - Domain mismatch', {
+          requestedDomain: domainName,
+          cachedDomain: parsedCache.domain,
+          cacheReadTime: `${elapsed.toFixed(2)}ms`,
+          timestamp: new Date().toISOString()
+        });
       }
     } else {
       const elapsed = performance.now() - cacheStart;
@@ -99,16 +80,12 @@ const cacheLogos = (domainName, logo, fullLogo) => {
       fullLogo,
       timestamp: Date.now()
     };
-    localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(cacheData));
-    localStorage.setItem(CACHE_EXPIRY_KEY, (Date.now() + CACHE_DURATION).toString());
+    sessionStorage.setItem(LOGO_CACHE_KEY, JSON.stringify(cacheData));
     
     const elapsed = performance.now() - cacheStart;
-    const expiresAt = new Date(Date.now() + CACHE_DURATION);
-    console.log('✅ [CACHE] Logos cached successfully', {
+    console.log('✅ [CACHE] Logos cached successfully (session)', {
       domain: domainName,
       cacheWriteTime: `${elapsed.toFixed(2)}ms`,
-      expiresAt: expiresAt.toISOString(),
-      duration: `${CACHE_DURATION / 1000 / 60} minutes`,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -196,10 +173,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
   // Add request deduplication to prevent multiple simultaneous API calls
   const fetchingRef = useRef(false);
   const mountCountRef = useRef(0);
-  
-  // Add retry tracking to prevent infinite retries
-  const retryCountRef = useRef(0);
-  const maxRetries = 5;
+  const hasAttemptedFetch = useRef(false);
   
   const [logos, setLogos] = useState(() => {
     // Initialize with cached data if available
@@ -214,7 +188,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
         loading: false,
         error: null,
         isHostBuddyDomain: true,
-        isRetrying: false,
+        hasFetchFailed: false,
       };
     }
     
@@ -232,7 +206,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
         loading: false,
         error: null,
         isHostBuddyDomain: false,
-        isRetrying: false,
+        hasFetchFailed: false,
       };
     }
     
@@ -242,7 +216,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
       loading: true,
       error: null,
       isHostBuddyDomain: false,
-      isRetrying: false,
+      hasFetchFailed: false,
     };
   });
 
@@ -373,8 +347,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
 
         const apiCallStart = performance.now();
         const response = await axios.post(apiUrl, requestBody, {
-          headers,
-          timeout: 5000 // 5 second timeout for faster failure recovery
+          headers
         });
         const apiCallElapsed = performance.now() - apiCallStart;
 
@@ -392,29 +365,24 @@ export const WhiteLabelLogoProvider = ({ children }) => {
           
           console.log('🖼️ [LOGO API] Logo URLs extracted', {
             logoUrl: logoUrl ? logoUrl.substring(0, 60) + '...' : 'None',
-            fullLogoUrl: fullLogoUrl ? fullLogoUrl.substring(0, 60) + '...' : 'None',
-            timestamp: new Date().toISOString()
-          });
-          
-          // ⚡ OPTIMIZATION: Set state immediately, don't wait for preload
-          // This allows components to start rendering while images download in background
-          console.log('⚡ [LOGO API] Setting logos immediately (non-blocking)', {
-            timestamp: new Date().toISOString()
-          });
-          
-          // Reset retry counter on success
-          retryCountRef.current = 0;
-          
-          setLogos({
-            logo: logoUrl,
-            fullLogo: fullLogoUrl,
-            loading: false,
-            error: null,
-            isHostBuddyDomain: false,
-            isRetrying: false,
-          });
-
-          // Cache the logos immediately
+          fullLogoUrl: fullLogoUrl ? fullLogoUrl.substring(0, 60) + '...' : 'None',
+          timestamp: new Date().toISOString()
+        });
+        
+        // ⚡ OPTIMIZATION: Set state immediately, don't wait for preload
+        // This allows components to start rendering while images download in background
+        console.log('⚡ [LOGO API] Setting logos immediately (non-blocking)', {
+          timestamp: new Date().toISOString()
+        });
+        
+        setLogos({
+          logo: logoUrl,
+          fullLogo: fullLogoUrl,
+          loading: false,
+          error: null,
+          isHostBuddyDomain: false,
+          hasFetchFailed: false,
+        });          // Cache the logos immediately
           const cacheStart = performance.now();
           cacheLogos(domainName, logoUrl, fullLogoUrl);
           const cacheElapsed = performance.now() - cacheStart;
@@ -465,15 +433,18 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
+          
+          // CRITICAL: For white label domains, keep loading state TRUE
+          // This prevents showing default HostBuddy logo
           setLogos({
             logo: null,
             fullLogo: null,
-            loading: false,
+            loading: true, // Keep loading to show skeleton
             error: 'No logos available',
             isHostBuddyDomain: false,
-            isRetrying: false,
+            hasFetchFailed: true,
           });
-          fetchingRef.current = false; // Reset fetch flag
+          fetchingRef.current = false;
         }
       } catch (error) {
         const totalElapsed = performance.now() - startTime;
@@ -485,10 +456,8 @@ export const WhiteLabelLogoProvider = ({ children }) => {
           timestamp: new Date().toISOString()
         });
         
-        fetchingRef.current = false; // Reset fetch flag on error
+        fetchingRef.current = false;
         
-        // On error for white label domains, don't fall back to HostBuddy styling
-        // Keep the loading state or show an error without changing isHostBuddyDomain
         const domainName = window.location.hostname;
         const isHostBuddy = domainName === 'hostbuddy.ai' || 
                            domainName === 'www.hostbuddy.ai';
@@ -500,48 +469,25 @@ export const WhiteLabelLogoProvider = ({ children }) => {
             loading: false,
             error: error.message,
             isHostBuddyDomain: true,
-            isRetrying: false,
+            hasFetchFailed: false,
           });
         } else {
-          // For white label domains, maintain loading state on network errors to prevent fallback to HostBuddy styling
-          // CRITICAL: Keep loading=true and provide placeholder URLs to prevent default logo flash
+          // CRITICAL: For white label domains, keep loading=true to show skeleton
+          // This prevents default HostBuddy logo from appearing
+          console.log('❌ [LOGO API] White label logo fetch failed - keeping loading state', {
+            mountNumber: currentMount,
+            error: error.message,
+            timestamp: new Date().toISOString()
+          });
+          
           setLogos({
             logo: null,
             fullLogo: null,
-            loading: true, // Keep loading to prevent fallback
+            loading: true, // Keep loading to show skeleton (NOT default logo)
             error: error.message,
             isHostBuddyDomain: false,
-            isRetrying: true, // New flag to indicate retry state
+            hasFetchFailed: true,
           });
-          
-          // Retry after a delay for white label domains, with max retry limit
-          if (retryCountRef.current < maxRetries) {
-            retryCountRef.current += 1;
-            const retryDelay = Math.min(3000 * retryCountRef.current, 15000); // Exponential backoff, max 15s
-            console.log(`🔄 [LOGO API] Retrying logo fetch for white label domain after error (attempt ${retryCountRef.current}/${maxRetries}) in ${retryDelay}ms...`, {
-              mountNumber: currentMount,
-              retryDelay,
-              timestamp: new Date().toISOString()
-            });
-            setTimeout(() => {
-              fetchingRef.current = false; // Reset fetch flag before retry
-              fetchWhiteLabelLogos();
-            }, retryDelay);
-          } else {
-            console.log('❌ [LOGO API] Max retries reached, stopping retry attempts', {
-              mountNumber: currentMount,
-              timestamp: new Date().toISOString()
-            });
-            // Only after max retries, allow fallback (but still mark as white label domain)
-            setLogos({
-              logo: null,
-              fullLogo: null,
-              loading: false,
-              error: `Max retries reached: ${error.message}`,
-              isHostBuddyDomain: false,
-              isRetrying: false,
-            });
-          }
         }
       }
     };
@@ -550,7 +496,7 @@ export const WhiteLabelLogoProvider = ({ children }) => {
     const handleTokenAvailable = (event) => {
       console.log('🎉 [LOGO API] Token available event received!', { hasToken: !!event.detail?.token });
       const token = getActiveToken();
-      if (token && !fetchingRef.current) {
+      if (token && !fetchingRef.current && !hasAttemptedFetch.current) {
         console.log('🔄 [LOGO API] Token confirmed, fetching logos...');
         fetchWhiteLabelLogos();
       }
@@ -559,7 +505,6 @@ export const WhiteLabelLogoProvider = ({ children }) => {
     window.addEventListener('tokenAvailable', handleTokenAvailable);
 
     // Check if we have a token before fetching
-    // This ensures logos are only loaded AFTER authentication
     const token = getActiveToken();
     const domainName = window.location.hostname;
     const isHostBuddy = domainName === 'hostbuddy.ai' || 
@@ -569,55 +514,19 @@ export const WhiteLabelLogoProvider = ({ children }) => {
       console.log('🔄 [LOGO API] Token found immediately, fetching logos...');
       fetchWhiteLabelLogos();
     } else if (isHostBuddy) {
-      // HostBuddy domain doesn't need white label logos
       console.log('⏭️ [LOGO API] HostBuddy domain, no logo fetch needed');
       setLogos(prevState => ({
         ...prevState,
         loading: false,
-        isRetrying: false,
         isHostBuddyDomain: true
       }));
+      hasAttemptedFetch.current = true;
     } else {
-      // For white label domains, keep polling for token
+      // For white label domains without token yet, just wait for event
       console.log('⏳ [LOGO API] No token found, waiting for authentication...');
-      setLogos(prevState => ({
-        ...prevState,
-        loading: false,
-        isRetrying: false
-      }));
-      
-      // Poll for token availability with exponential backoff
-      let attempts = 0;
-      const maxAttempts = 10;
-      const checkForToken = () => {
-        attempts++;
-        const retryToken = getActiveToken();
-        if (retryToken) {
-          console.log('🔄 [LOGO API] Token now available, fetching logos...');
-          fetchWhiteLabelLogos();
-        } else if (attempts < maxAttempts) {
-          // Retry with increasing delay: 100ms, 200ms, 400ms, 800ms, etc.
-          const delay = Math.min(100 * Math.pow(2, attempts - 1), 2000);
-          console.log(`⏳ [LOGO API] Token check attempt ${attempts}/${maxAttempts}, retrying in ${delay}ms...`);
-          setTimeout(checkForToken, delay);
-        } else {
-          console.log('⏹️ [LOGO API] Max token check attempts reached, stopping attempts');
-          console.log('ℹ️ [LOGO API] This is expected on unauthenticated pages like /login');
-          console.log('ℹ️ [LOGO API] Will wait for tokenAvailable event...');
-          // Don't show error - this is normal for unauthenticated pages
-        }
-      };
-      
-      // Start checking after a short initial delay
-      const initialTimer = setTimeout(checkForToken, 100);
-      
-      return () => {
-        clearTimeout(initialTimer);
-        window.removeEventListener('tokenAvailable', handleTokenAvailable);
-      };
+      console.log('ℹ️ [LOGO API] Will wait for tokenAvailable event...');
     }
     
-    // Cleanup event listener on unmount
     return () => {
       window.removeEventListener('tokenAvailable', handleTokenAvailable);
     };

@@ -7,13 +7,13 @@ import "./logoComponent.css";
 
 const LogoComponent = ({ type, colour, onlyIcon }) => {
     const { isWhiteLabel, brandName } = useWhiteLabelBranding();
-    const { logo, fullLogo, loading, isHostBuddyDomain, isRetrying } = useWhiteLabelLogos();
+    const { logo, fullLogo, loading, isHostBuddyDomain, hasFetchFailed } = useWhiteLabelLogos();
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imageError, setImageError] = useState(false);
     
-    // CRITICAL: For white label domains, never show default HostBuddy icon during loading/retry
-    // Only show the icon if we're actually on HostBuddy domain OR we have a successful logo URL
-    const shouldShowIcon = isHostBuddyDomain || (!loading && !isRetrying && logo);
+    // CRITICAL: For white label domains with failed API, show loading skeleton FOREVER
+    // Never show default HostBuddy icon on white label domains
+    const shouldShowIcon = isHostBuddyDomain || (!loading && !hasFetchFailed && logo);
     const logoSrc = isHostBuddyDomain ? icon : logo;
     
     // Track component mount/unmount
@@ -23,7 +23,7 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
             loading,
             isHostBuddyDomain,
             hasLogo: !!logo,
-            isRetrying,
+            hasFetchFailed,
             shouldShowIcon,
             timestamp: new Date().toISOString()
         });
@@ -121,8 +121,9 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
     
     // For collapsed navigation, show the small logo (40x40)
     if (onlyIcon) {
-        // If we're on white label domain and still loading/retrying, show skeleton only
-        if (!isHostBuddyDomain && (loading || isRetrying || !shouldShowIcon)) {
+        // CRITICAL: If we're on white label domain and API failed or still loading, 
+        // show loading skeleton FOREVER (never show default HostBuddy icon)
+        if (!isHostBuddyDomain && (loading || hasFetchFailed || !shouldShowIcon)) {
             return (
                 <div className="logo-container" style={{ willChange: 'opacity' }}>
                     <div 
@@ -134,6 +135,7 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
                             backgroundColor: 'rgba(255, 255, 255, 0.1)',
                             animation: 'pulse 1.5s ease-in-out infinite alternate'
                         }}
+                        title={hasFetchFailed ? "Logo loading failed" : "Loading logo..."}
                     />
                 </div>
             );
@@ -175,8 +177,9 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
     }
     
     // For expanded navigation, show branding text
-    // If we're on white label domain and still loading/retrying, show skeleton only
-    if (!isHostBuddyDomain && (loading || isRetrying || !shouldShowIcon)) {
+    // CRITICAL: If we're on white label domain and API failed or still loading,
+    // show loading skeleton FOREVER (never show default HostBuddy branding)
+    if (!isHostBuddyDomain && (loading || hasFetchFailed || !shouldShowIcon)) {
         return (
             <div className="logo-container" style={{ willChange: 'opacity' }}>
                 <div 
@@ -188,6 +191,7 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
                         backgroundColor: 'rgba(255, 255, 255, 0.1)',
                         animation: 'pulse 1.5s ease-in-out infinite alternate'
                     }}
+                    title={hasFetchFailed ? "Logo loading failed" : "Loading logo..."}
                 />
                 <div
                     style={{
@@ -198,6 +202,7 @@ const LogoComponent = ({ type, colour, onlyIcon }) => {
                         marginLeft: '8px',
                         animation: 'pulse 1.5s ease-in-out infinite alternate'
                     }}
+                    title={hasFetchFailed ? "Brand name loading failed" : "Loading brand name..."}
                 />
             </div>
         );

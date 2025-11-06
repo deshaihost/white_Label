@@ -4,10 +4,9 @@ import { getActiveToken } from './apiCore';
 
 const WhiteLabelCssContext = createContext();
 
-// Cache key for localStorage
+// Cache key for sessionStorage (persists for session, not time-based)
 const CSS_CACHE_KEY = 'whiteLabelCssCache';
-const CSS_CACHE_EXPIRY_KEY = 'whiteLabelCssCacheExpiry';
-const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
+const CSS_FETCH_STATUS_KEY = 'whiteLabelCssFetchStatus';
 
 export const useWhiteLabelCss = () => {
   const context = useContext(WhiteLabelCssContext);
@@ -26,45 +25,27 @@ const getCachedCssConfig = (domainName) => {
   });
   
   try {
-    const cachedData = localStorage.getItem(CSS_CACHE_KEY);
-    const cacheExpiry = localStorage.getItem(CSS_CACHE_EXPIRY_KEY);
+    const cachedData = sessionStorage.getItem(CSS_CACHE_KEY);
     
-    if (cachedData && cacheExpiry) {
-      const expiryTime = parseInt(cacheExpiry, 10);
-      const now = Date.now();
-      
-      if (now < expiryTime) {
-        const parsedCache = JSON.parse(cachedData);
-        if (parsedCache.domain === domainName) {
-          const elapsed = performance.now() - cacheStart;
-          const remainingTime = Math.floor((expiryTime - now) / 1000 / 60);
-          console.log('✅ [CSS CACHE] Cache HIT! Using cached CSS config', {
-            domain: domainName,
-            cachedTimestamp: new Date(parsedCache.timestamp).toISOString(),
-            expiresIn: `${remainingTime} minutes`,
-            cacheReadTime: `${elapsed.toFixed(2)}ms`,
-            timestamp: new Date().toISOString()
-          });
-          return parsedCache;
-        } else {
-          const elapsed = performance.now() - cacheStart;
-          console.log('❌ [CSS CACHE] Cache MISS - Domain mismatch', {
-            requestedDomain: domainName,
-            cachedDomain: parsedCache.domain,
-            cacheReadTime: `${elapsed.toFixed(2)}ms`,
-            timestamp: new Date().toISOString()
-          });
-        }
-      } else {
+    if (cachedData) {
+      const parsedCache = JSON.parse(cachedData);
+      if (parsedCache.domain === domainName) {
         const elapsed = performance.now() - cacheStart;
-        console.log('⏰ [CSS CACHE] Cache EXPIRED - Clearing old cache', {
-          expiredAt: new Date(expiryTime).toISOString(),
+        console.log('✅ [CSS CACHE] Cache HIT! Using cached CSS config', {
+          domain: domainName,
+          cachedTimestamp: new Date(parsedCache.timestamp).toISOString(),
           cacheReadTime: `${elapsed.toFixed(2)}ms`,
           timestamp: new Date().toISOString()
         });
-        // Cache expired, clear it
-        localStorage.removeItem(CSS_CACHE_KEY);
-        localStorage.removeItem(CSS_CACHE_EXPIRY_KEY);
+        return parsedCache;
+      } else {
+        const elapsed = performance.now() - cacheStart;
+        console.log('❌ [CSS CACHE] Cache MISS - Domain mismatch', {
+          requestedDomain: domainName,
+          cachedDomain: parsedCache.domain,
+          cacheReadTime: `${elapsed.toFixed(2)}ms`,
+          timestamp: new Date().toISOString()
+        });
       }
     } else {
       const elapsed = performance.now() - cacheStart;
@@ -98,16 +79,12 @@ const cacheCssConfig = (domainName, cssConfig) => {
       cssConfig,
       timestamp: Date.now()
     };
-    localStorage.setItem(CSS_CACHE_KEY, JSON.stringify(cacheData));
-    localStorage.setItem(CSS_CACHE_EXPIRY_KEY, (Date.now() + CACHE_DURATION).toString());
+    sessionStorage.setItem(CSS_CACHE_KEY, JSON.stringify(cacheData));
     
     const elapsed = performance.now() - cacheStart;
-    const expiresAt = new Date(Date.now() + CACHE_DURATION);
-    console.log('✅ [CSS CACHE] CSS config cached successfully', {
+    console.log('✅ [CSS CACHE] CSS config cached successfully (session)', {
       domain: domainName,
       cacheWriteTime: `${elapsed.toFixed(2)}ms`,
-      expiresAt: expiresAt.toISOString(),
-      duration: `${CACHE_DURATION / 1000 / 60} minutes`,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -240,10 +217,39 @@ const applyCssVariables = (cssConfig) => {
   }
 };
 
+// Helper function to apply neutral loading CSS variables for white label domains
+// This prevents flash of default HostBuddy colors while fetching
+const applyLoadingCssVariables = () => {
+  const root = document.documentElement;
+  
+  // Apply neutral colors that won't clash with any brand
+  const loadingColors = {
+    '--white-label-background-primary': '#ffffff',
+    '--white-label-background-secondary': '#f5f5f5',
+    '--white-label-background-tertiary': '#e5e5e5',
+    '--white-label-border-primary': '#d0d0d0',
+    '--white-label-border-secondary': '#e0e0e0',
+    '--white-label-text-primary': '#000000',
+    '--white-label-text-secondary': '#666666',
+    '--white-label-interactive-primary': '#808080',
+    '--white-label-button-primary': '#808080',
+    '--white-label-button-primary-hover': '#696969',
+  };
+  
+  Object.entries(loadingColors).forEach(([key, value]) => {
+    root.style.setProperty(key, value);
+  });
+  
+  console.log('⏳ [CSS APPLY] Loading state CSS applied (neutral colors)', {
+    timestamp: new Date().toISOString()
+  });
+};
+
 export const WhiteLabelCssProvider = ({ children }) => {
   // Add request deduplication to prevent multiple simultaneous API calls
   const fetchingRef = useRef(false);
   const mountCountRef = useRef(0);
+  const hasAttemptedFetch = useRef(false);
   
   const [cssState, setCssState] = useState(() => {
     // Initialize with cached data if available
@@ -277,6 +283,9 @@ export const WhiteLabelCssProvider = ({ children }) => {
       };
     }
     
+    // No cache - apply loading CSS to prevent flash
+    applyLoadingCssVariables();
+    
     return {
       cssConfig: null,
       loading: true,
@@ -287,10 +296,6 @@ export const WhiteLabelCssProvider = ({ children }) => {
     };
   });
 
-  // Add retry tracking to prevent infinite retries
-  const retryCountRef = React.useRef(0);
-  const maxRetries = 5;
-
   useEffect(() => {
     // Increment mount counter for debugging multiple instances
     mountCountRef.current += 1;
@@ -299,13 +304,16 @@ export const WhiteLabelCssProvider = ({ children }) => {
     console.log('🔍 [CSS PROVIDER] WhiteLabelCssProvider mounted', {
       mountNumber: currentMount,
       isFetching: fetchingRef.current,
+      hasAttemptedFetch: hasAttemptedFetch.current,
       timestamp: new Date().toISOString()
     });
 
     const fetchWhiteLabelCss = async () => {
       // Prevent multiple simultaneous requests
-      if (fetchingRef.current) {
-        console.log('⏸️ [CSS API] Request already in progress, skipping duplicate', {
+      if (fetchingRef.current || hasAttemptedFetch.current) {
+        console.log('⏸️ [CSS API] Request already attempted, skipping duplicate', {
+          isFetching: fetchingRef.current,
+          hasAttemptedFetch: hasAttemptedFetch.current,
           mountNumber: currentMount,
           timestamp: new Date().toISOString()
         });
@@ -313,6 +321,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
       }
       
       fetchingRef.current = true;
+      hasAttemptedFetch.current = true;
       
       const startTime = performance.now();
       console.log('🚀 [CSS API] Starting CSS config fetch process...', {
@@ -350,7 +359,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             isHostBuddyDomain: true,
             featuresSettings: null,
           });
-          fetchingRef.current = false; // Reset fetch flag
+          fetchingRef.current = false;
           return;
         }
 
@@ -368,8 +377,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
-          fetchingRef.current = false; // Reset fetch flag
-          // Set loading to false since cache data is already in state
+          fetchingRef.current = false;
           setCssState(prevState => ({
             ...prevState,
             loading: false,
@@ -392,19 +400,14 @@ export const WhiteLabelCssProvider = ({ children }) => {
           timestamp: new Date().toISOString()
         });
 
-        // Simulate progress during fetch
-        const progressInterval = setInterval(() => {
-          setCssState(prev => ({
-            ...prev,
-            progress: Math.min(prev.progress + 10, 90) // Cap at 90% until actual response
-          }));
-        }, 100);
+        setCssState(prev => ({
+          ...prev,
+          progress: 50
+        }));
 
         const apiCallStart = performance.now();
         const response = await getCssConfig({ domain: domainName });
         const apiCallElapsed = performance.now() - apiCallStart;
-
-        clearInterval(progressInterval);
 
         console.log('✅ [CSS API] API response received', {
           success: response.success,
@@ -424,9 +427,6 @@ export const WhiteLabelCssProvider = ({ children }) => {
           
           // Apply CSS variables immediately
           applyCssVariables(cssConfig);
-          
-          // Reset retry counter on success
-          retryCountRef.current = 0;
           
           // Set state
           setCssState({
@@ -455,7 +455,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             timestamp: new Date().toISOString()
           });
           
-          fetchingRef.current = false; // Reset fetch flag
+          fetchingRef.current = false;
         } else {
           const totalElapsed = performance.now() - startTime;
           console.log('⚠️ [CSS API] No CSS config available in response', {
@@ -464,6 +464,8 @@ export const WhiteLabelCssProvider = ({ children }) => {
             mountNumber: currentMount,
             timestamp: new Date().toISOString()
           });
+          
+          // Keep loading CSS applied, don't revert to defaults
           setCssState({
             cssConfig: null,
             loading: false,
@@ -472,7 +474,7 @@ export const WhiteLabelCssProvider = ({ children }) => {
             isHostBuddyDomain: false,
             featuresSettings: null,
           });
-          fetchingRef.current = false; // Reset fetch flag
+          fetchingRef.current = false;
         }
       } catch (error) {
         const totalElapsed = performance.now() - startTime;
@@ -484,10 +486,8 @@ export const WhiteLabelCssProvider = ({ children }) => {
           timestamp: new Date().toISOString()
         });
         
-        fetchingRef.current = false; // Reset fetch flag on error
+        fetchingRef.current = false;
         
-        // On error for white label domains, don't fall back to HostBuddy styling
-        // Keep the loading state or show an error without changing isHostBuddyDomain
         const domainName = window.location.hostname;
         const isHostBuddy = domainName === 'hostbuddy.ai' || 
                            domainName === 'www.hostbuddy.ai';
@@ -502,40 +502,22 @@ export const WhiteLabelCssProvider = ({ children }) => {
             featuresSettings: null,
           });
         } else {
-          // For white label domains, maintain loading state on network errors to prevent fallback to HostBuddy styling
+          // For white label domains, keep neutral loading CSS applied
+          // Don't retry with timeouts - rely on user refresh or navigation
+          console.log('❌ [CSS API] White label CSS fetch failed - keeping neutral loading state', {
+            mountNumber: currentMount,
+            error: error.message,
+            timestamp: new Date().toISOString()
+          });
+          
           setCssState({
             cssConfig: null,
-            loading: true, // Keep loading to prevent fallback
+            loading: false,
             progress: 0,
             error: error.message,
             isHostBuddyDomain: false,
             featuresSettings: null,
           });
-          
-          // Retry after a delay for white label domains, with max retry limit
-          if (retryCountRef.current < maxRetries) {
-            retryCountRef.current += 1;
-            const retryDelay = Math.min(3000 * retryCountRef.current, 15000); // Exponential backoff, max 15s
-            console.log(`🔄 [CSS API] Retrying CSS fetch for white label domain after error (attempt ${retryCountRef.current}/${maxRetries}) in ${retryDelay}ms...`, {
-              mountNumber: currentMount
-            });
-            setTimeout(() => {
-              fetchingRef.current = false; // Reset fetch flag before retry
-              fetchWhiteLabelCss();
-            }, retryDelay);
-          } else {
-            console.log('❌ [CSS API] Max retries reached, stopping retry attempts', {
-              mountNumber: currentMount
-            });
-            setCssState({
-              cssConfig: null,
-              loading: false,
-              progress: 0,
-              error: `Max retries reached: ${error.message}`,
-              isHostBuddyDomain: false,
-              featuresSettings: null,
-            });
-          }
         }
       }
     };
@@ -544,9 +526,8 @@ export const WhiteLabelCssProvider = ({ children }) => {
     const handleTokenAvailable = (event) => {
       console.log('🎉 [CSS API] Token available event received!', { hasToken: !!event.detail?.token });
       const token = getActiveToken();
-      if (token && !fetchingRef.current) {
+      if (token && !fetchingRef.current && !hasAttemptedFetch.current) {
         console.log('🔄 [CSS API] Token confirmed, fetching CSS...');
-        // Set loading true while fetching
         setCssState(prevState => ({
           ...prevState,
           loading: true,
@@ -559,7 +540,6 @@ export const WhiteLabelCssProvider = ({ children }) => {
     window.addEventListener('tokenAvailable', handleTokenAvailable);
 
     // Check if we have a token before fetching
-    // This ensures CSS is only loaded AFTER authentication
     const token = getActiveToken();
     const domainName = window.location.hostname;
     const isHostBuddy = domainName === 'hostbuddy.ai' || 
@@ -569,20 +549,19 @@ export const WhiteLabelCssProvider = ({ children }) => {
       console.log('🔄 [CSS API] Token found immediately, fetching CSS...');
       fetchWhiteLabelCss();
     } else if (isHostBuddy) {
-      // HostBuddy domain doesn't need white label CSS
       console.log('⏭️ [CSS API] HostBuddy domain, no CSS fetch needed');
       setCssState(prevState => ({
         ...prevState,
         loading: false,
         isHostBuddyDomain: true
       }));
+      hasAttemptedFetch.current = true;
     } else {
       // For white label domains without token yet
       const currentPath = window.location.pathname;
       const isAuthenticatedRoute = !['/login', '/signup', '/forgot-password', '/reset-password', '/client-login'].includes(currentPath);
       
       if (isAuthenticatedRoute) {
-        // We're on an authenticated route (like /dashboard) - WAIT for CSS to load
         console.log('⏳ [CSS API] No token yet on authenticated route, waiting for authentication...');
         console.log('🔒 [CSS API] Loading state ACTIVE - will wait for tokenAvailable event');
         setCssState(prevState => ({
@@ -591,44 +570,14 @@ export const WhiteLabelCssProvider = ({ children }) => {
           progress: 5
         }));
       } else {
-        // We're on an unauthenticated page like /login - DON'T wait
         console.log('✅ [CSS API] On unauthenticated page, no loading needed');
         setCssState(prevState => ({
           ...prevState,
           loading: false
         }));
       }
-      
-      // Poll for token availability with exponential backoff
-      let attempts = 0;
-      const maxAttempts = 10;
-      const checkForToken = () => {
-        attempts++;
-        const retryToken = getActiveToken();
-        if (retryToken) {
-          console.log('🔄 [CSS API] Token now available, fetching CSS...');
-          fetchWhiteLabelCss();
-        } else if (attempts < maxAttempts) {
-          // Retry with increasing delay: 100ms, 200ms, 400ms, 800ms, etc.
-          const delay = Math.min(100 * Math.pow(2, attempts - 1), 2000);
-          console.log(`⏳ [CSS API] Token check attempt ${attempts}/${maxAttempts}, retrying in ${delay}ms...`);
-          setTimeout(checkForToken, delay);
-        } else {
-          console.log('⏹️ [CSS API] Max token check attempts reached, stopping attempts');
-          console.log('ℹ️ [CSS API] Will wait for tokenAvailable event...');
-        }
-      };
-      
-      // Start checking after a short initial delay
-      const initialTimer = setTimeout(checkForToken, 100);
-      
-      return () => {
-        clearTimeout(initialTimer);
-        window.removeEventListener('tokenAvailable', handleTokenAvailable);
-      };
     }
     
-    // Cleanup event listener on unmount
     return () => {
       window.removeEventListener('tokenAvailable', handleTokenAvailable);
     };
